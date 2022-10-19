@@ -1,7 +1,6 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Represents a composition of {@link Model.Node Nodes}. Notice that Graph
@@ -13,16 +12,18 @@ import java.util.HashSet;
 public class Graph extends Node {
 
     private ArrayList<Node> nodes;
-    private boolean isCollapsable;
+    private final boolean isCollapsible;
     private boolean isCollapsed;
 
     /**
-     * Construct an Graph with a tag
+     * Construct an Graph with a tag and whether the graph is collapsible
      *
      * @param tag Name of port
+     * @param isCollapsible Whether graph should be collapsible
      */
-    public Graph(String tag) {
+    public Graph(String tag, boolean isCollapsible) {
         super(tag);
+        this.isCollapsible = isCollapsible;
     }
 
     @Override
