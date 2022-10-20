@@ -3,7 +3,7 @@ package Model.Nodes;
 /**
  * Implements the logical AND gate.
  * 
- * @author victh
+ * @author Viktor Bicskei
  *
  */
 public class ANDNode extends Model.Node {

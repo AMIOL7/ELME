@@ -3,7 +3,11 @@ package Model.Nodes;
 /**
  * Implements the logical OR gate.
  * 
+<<<<<<< HEAD
+ * @author Viktor Bicskei
+=======
  * @author victh
+>>>>>>> branch 'basic-nodes' of https://github.com/AMIOL7/ELME.git
  *
  */
 

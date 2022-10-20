@@ -3,7 +3,7 @@ package Model.Nodes;
 /**
  * Implements the logical XOR gate. The gate is true if exactly 1 input is true.
  * 
- * @author victh
+ * @author Viktor Bicskei
  *
  */
 public class XORNode extends Model.Node {
