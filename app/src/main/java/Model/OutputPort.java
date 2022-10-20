@@ -28,4 +28,9 @@ public class OutputPort extends Port {
     public boolean getValue() {
         return value;
     }
+    
+    public void setValue(boolean value) {
+    	this.value=value;
+    }
+    
 }
