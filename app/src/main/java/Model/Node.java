@@ -29,6 +29,15 @@ public abstract class Node {
      * {@link Model.OutputPort OutputPorts}.
      */
     public abstract void evaluate();
+    
+    /**
+     * Sets the value of all the "OutputPorts" in "outputs"
+     * @author Viktor Bicskei
+     * @param value
+     */
+    public void setOutputs(boolean value) {
+    	outputs.stream().forEach(x -> x.setValue(value));
+    }
 
     public String getTag() {
         return tag;
