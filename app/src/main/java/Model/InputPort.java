@@ -27,14 +27,18 @@ public class InputPort extends Port {
     }
 
     /**
-     * If it is connected to a port it fetches the value thereof, otherwise it
-     * returns false.
+     * In case there is a valid value available returns it, otherwise returns null.
      *
-     * @return boolean value associated with port
+     * @return Boolean value associated with port
      */
     @Override
-    public boolean getValue() {
-        return isConnected() && connectedPort.getValue();
+    public Boolean getValue() {
+    	
+    	if (!isConnected()) {
+    	    return null;
+    	}
+    	 
+    	return connectedPort.getValue();
     }
 
     /**

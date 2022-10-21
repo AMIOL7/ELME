@@ -13,7 +13,7 @@ package Model;
  */
 public class OutputPort extends Port {
 
-    private boolean value;
+    private Boolean value;
 
     /**
      * Construct an OutputPort with a tag
@@ -25,7 +25,7 @@ public class OutputPort extends Port {
     }
 
     @Override
-    public boolean getValue() {
+    public Boolean getValue() {
         return value;
     }
     
