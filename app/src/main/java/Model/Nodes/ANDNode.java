@@ -8,16 +8,17 @@ package Model.Nodes;
  */
 public class ANDNode extends Model.Node {
 
-	public ANDNode(String tag) {
-		super(tag);
+	
+	public ANDNode() {
+		super("AND",2,1);
 	}
 
-	public void evaluate() {
+	public void evaluateImpl() {
 		if (inputs.stream().allMatch(x -> x.getValue() == true)) {
-			setOutputs(true);
+			setAllOutputs(true);
 		}
 		else {
-			setOutputs(false);
+			setAllOutputs(false);
 		}
 	}
 }

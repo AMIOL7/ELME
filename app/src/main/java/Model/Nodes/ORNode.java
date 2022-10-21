@@ -8,18 +8,17 @@ package Model.Nodes;
  */
 
 public class ORNode extends Model.Node {
-	public ORNode(String tag) {
-		super(tag);
+	
+	public ORNode() {
+		super("OR",2,1);
 	}
 	
-	public void evaluate() {
+	public void evaluateImpl() {
 		if (inputs.stream().anyMatch(x -> x.getValue() == true)) {
-			setOutputs(true);
-			//outputs.stream().forEach(x -> x.setValue(true));
+			setAllOutputs(true);
 		}
 		else {
-			setOutputs(false);
-			//outputs.stream().forEach(x -> x.setValue(false));
+			setAllOutputs(false);
 		}
 			
 	}

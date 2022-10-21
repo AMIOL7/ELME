@@ -7,15 +7,16 @@ package Model.Nodes;
  *
  */
 public class XORNode extends Model.Node {
-	public XORNode(String tag) {
-		super(tag);
+	
+	public XORNode() {
+		super("XOR",2,1);
 	}
-	public void evaluate() {
+	public void evaluateImpl() {
 		if(inputs.stream().filter(x -> x.getValue() == true).count() == 1) {
-			setOutputs(true);
+			setAllOutputs(true);
 		}
 		else {
-			setOutputs(false);
+			setAllOutputs(false);
 		}
 	}
 }

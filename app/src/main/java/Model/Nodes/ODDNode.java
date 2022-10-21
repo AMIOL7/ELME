@@ -7,16 +7,17 @@ package Model.Nodes;
  * @author Viktor Bicskei
  */
 public class ODDNode extends Model.Node {
-	public ODDNode(String tag) {
-		super(tag);
+	
+	public ODDNode() {
+		super("ODD",3,1);
 	}
 	
-	public void evaluate() {
+	public void evaluateImpl() {
 		if (inputs.stream().filter(x -> x.getValue() == true).count()%2 == 0) {
-			setOutputs(true);
+			setAllOutputs(true);
 		}
 		else {
-			setOutputs(false);
+			setAllOutputs(false);
 		}
 			
 	}

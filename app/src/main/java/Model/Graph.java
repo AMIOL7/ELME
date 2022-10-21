@@ -27,7 +27,7 @@ public class Graph extends Node {
     }
 
     @Override
-    public void evaluate() {
+    public void evaluateImpl() {
         nodes.forEach(node -> node.evaluate());
     }
 

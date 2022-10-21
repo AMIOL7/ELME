@@ -21,9 +21,9 @@ public abstract class Port {
     /**
      * Returns value associated with port
      *
-     * @return boolean value associated with port
+     * @return Boolean value associated with port
      */
-    public abstract boolean getValue();
+    public abstract Boolean getValue();
 
     public String getTag() {
         return tag;
