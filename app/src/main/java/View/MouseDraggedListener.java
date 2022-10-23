@@ -8,6 +8,9 @@ import de.gurkenlabs.litiengine.graphics.Camera;
 import de.gurkenlabs.litiengine.input.IMouse;
 import de.gurkenlabs.litiengine.input.Input;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 
 /**
@@ -19,51 +22,72 @@ import java.awt.geom.Point2D;
  * 
  * @author andru
  */
-public class MouseDraggedListener implements IMouse.MouseDraggedListener{
+public class MouseDraggedListener implements IMouse.MouseDraggedListener {
+
     private Point2D camPos;
-    private Point2D prevPosition;
+    private Point2D oldPos;
     private Camera cam;
-    private final double speed = 2.8;
-    
-    public MouseDraggedListener(Camera cam) {    
+    private boolean dragging;
+
+    public MouseDraggedListener(Camera cam) {
         super();
-        prevPosition = Input.mouse().getLocation();
+        oldPos = Input.mouse().getLocation();
         this.cam = cam;
         camPos = new Point2D.Double(0, 0);
+        dragging = false;
+
+        Input.mouse().addMouseListener(new MouseListener() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (Input.mouse().isRightButton(e)) {
+                    dragging = true;
+                    oldPos = Input.mouse().getLocation();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (Input.mouse().isRightButton(e)) {
+                    dragging = false;
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+        });
+
         
     }
-    
+
     @Override
     public void mouseDragged(MouseEvent me) {
-        Point2D currentPos =  Input.mouse().getLocation();
-        System.out.println(prevPosition + " - " + currentPos);
-        
-        double dx=0;
-        double dy=0;
-        if (Input.mouse().isRightButtonPressed()) {
-            
-            if (currentPos.getX()>prevPosition.getX()) {
-                dx=-1;
-            } else if (currentPos.getX()<prevPosition.getX()){
-                dx=1;
-            } else {
-                dx=0;
-            }
-            if (currentPos.getY()>prevPosition.getY()) {
-                dy=-1;
-            } else if (currentPos.getY()<prevPosition.getY()){
-                dy=1;
-            } else {
-                dy=0;
-            }
+        System.out.println("Dragging: "+dragging);
+        if (!dragging) {
+            return;
         }
-        System.out.println(camPos);
-        camPos = new Point2D.Double(camPos.getX() + dx*speed, camPos.getY() + dy*speed);
-        System.out.println(camPos);
-        cam.pan(camPos, 1);
 
-        prevPosition = currentPos;
+        Point2D newPos = Input.mouse().getLocation();
+        Point2D deltaPos = new Point2D.Double(oldPos.getX() - newPos.getX(), oldPos.getY() - newPos.getY());
         
+        System.out.println("Old: "+oldPos);
+        System.out.println("New: "+newPos);
         
+        double scale = 1.0 / cam.getZoom();
+        camPos = new Point2D.Double(camPos.getX() + deltaPos.getX() * scale, camPos.getY() + deltaPos.getY() * scale);
+        cam.pan(camPos, 1);
+        
+        System.out.println("CamPos: "+camPos);
+        
+        oldPos = newPos;
     }
 }
