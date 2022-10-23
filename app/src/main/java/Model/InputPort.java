@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Optional;
+
 /**
  * A kind of {@link Model.Port Port} which is used as inputs for
  * {@link Model.Node Nodes}. This kind of port can only be connected to one
@@ -27,18 +29,19 @@ public class InputPort extends Port {
     }
 
     /**
-     * In case there is a valid value available returns it, otherwise returns null.
+     * In case there is a valid value available returns it, otherwise returns
+     * null.
      *
      * @return Boolean value associated with port
      */
     @Override
-    public Boolean getValue() {
-    	
-    	if (!isConnected()) {
-    	    return null;
-    	}
-    	 
-    	return connectedPort.getValue();
+    public Optional<Boolean> getValue() {
+
+        if (!isConnected()) {
+            return Optional.empty();
+        }
+
+        return connectedPort.getValue();
     }
 
     /**
