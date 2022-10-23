@@ -26,7 +26,8 @@ public class MainScreen extends GameScreen {
     public void render(final Graphics2D g) {
         super.render(g);
         g.setColor(Color.RED);
-        //Game.graphics().renderText(g, "Test text", 100, 100);
+        Game.graphics().renderText(g, "Test text", 100, 100);
+        
         
         BufferedImage img = null;
         try {

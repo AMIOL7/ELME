@@ -15,7 +15,7 @@ import java.awt.event.MouseWheelListener;
 public class CustomWheelListener implements MouseWheelListener{
     
     private Camera cam;
-    private static final float MILTIPLIER = (float)20.0;
+    private static final float MILTIPLIER = (float)0.5;
 
     public CustomWheelListener(Camera cam) {
         super();
