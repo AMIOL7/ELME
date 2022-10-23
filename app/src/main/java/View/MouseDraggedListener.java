@@ -82,7 +82,7 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
         System.out.println("Old: "+oldPos);
         System.out.println("New: "+newPos);
         
-        double scale = 1.0 / cam.getZoom();
+        double scale = 1.0 / cam.getRenderScale();
         camPos = new Point2D.Double(camPos.getX() + deltaPos.getX() * scale, camPos.getY() + deltaPos.getY() * scale);
         cam.pan(camPos, 1);
         
