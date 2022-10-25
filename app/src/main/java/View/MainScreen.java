@@ -27,15 +27,5 @@ public class MainScreen extends GameScreen {
         super.render(g);
         g.setColor(Color.RED);
         Game.graphics().renderText(g, "Test text", 100, 100);
-        
-        
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File("./Resources/img.png"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
-        Game.graphics().renderImage(g, img, 0, 0);
     }
 }
