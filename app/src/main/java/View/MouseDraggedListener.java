@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 
 /**
- *This event listener listens for when the user drags the mouse of the the game 
+ * This event listener listens for when the user drags the mouse of the the game 
  * screen while holding right mouse button pressed. When such event occurs,
  * it pans the camera in the opposite direction, since the element on the screen
  * should move in the same direction as the mouse
@@ -25,7 +25,7 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
 
     private Point2D camPos;
     private Point2D oldPos;
-    private ICamera cam;
+    private final ICamera cam;
     private boolean dragging;
 
     public MouseDraggedListener() {

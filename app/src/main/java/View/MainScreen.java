@@ -8,13 +8,11 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 
 /**
+ * This class is responsible fo rendering the main screen of the game
  *
- * @author andru
+ * @author Shamanayev Andrey
  */
 public class MainScreen extends GameScreen {
     

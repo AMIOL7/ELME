@@ -6,12 +6,13 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 /**
+ * This listeners listens for MouseWheelEvent to allow zooming feature
  *
  * @author andru
  */
 public class CustomWheelListener implements MouseWheelListener{
     
-    private ICamera cam;
+    private final ICamera cam;
     private static final float MILTIPLIER = (float)0.5;
 
     public CustomWheelListener() {

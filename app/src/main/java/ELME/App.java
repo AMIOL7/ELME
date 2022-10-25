@@ -7,8 +7,6 @@ import View.*;
 import de.gurkenlabs.litiengine.*;
 import de.gurkenlabs.litiengine.graphics.*;
 import de.gurkenlabs.litiengine.input.Input;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 
 public class App {
