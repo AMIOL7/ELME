@@ -71,7 +71,6 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        System.out.println("Dragging: "+dragging);
         if (!dragging) {
             return;
         }
@@ -79,14 +78,9 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
         Point2D newPos = Input.mouse().getLocation();
         Point2D deltaPos = new Point2D.Double(oldPos.getX() - newPos.getX(), oldPos.getY() - newPos.getY());
         
-        System.out.println("Old: "+oldPos);
-        System.out.println("New: "+newPos);
-        
         double scale = 1.0 / cam.getRenderScale();
         camPos = new Point2D.Double(camPos.getX() + deltaPos.getX() * scale, camPos.getY() + deltaPos.getY() * scale);
         cam.pan(camPos, 1);
-        
-        System.out.println("CamPos: "+camPos);
         
         oldPos = newPos;
     }

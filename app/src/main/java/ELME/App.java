@@ -35,7 +35,6 @@ public class App {
         Game.init(args);
         Game.screens().add(new MainScreen());
         Camera cam  = new Camera();
-//        cam.setClampToMap(true);
         Game.world().setCamera(cam);
         System.out.println("Camera printout: "+cam.getZoom());
         
@@ -43,8 +42,6 @@ public class App {
         Input.mouse().onWheelMoved(new CustomWheelListener(cam));
         Game.start();
         
-//        cam.setZoom((float) 1000,10);
-//        cam.update();
         System.out.println("Camera printout: "+cam.getZoom());
     }
 }
