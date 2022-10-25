@@ -1,6 +1,7 @@
 package View;
 
-import de.gurkenlabs.litiengine.graphics.Camera;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.ICamera;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
@@ -10,12 +11,12 @@ import java.awt.event.MouseWheelListener;
  */
 public class CustomWheelListener implements MouseWheelListener{
     
-    private Camera cam;
+    private ICamera cam;
     private static final float MILTIPLIER = (float)0.5;
 
-    public CustomWheelListener(Camera cam) {
+    public CustomWheelListener() {
         super();
-        this.cam = cam;
+        this.cam = Game.world().camera();
     }
     
     

@@ -4,13 +4,12 @@
  */
 package View;
 
-import de.gurkenlabs.litiengine.graphics.Camera;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.ICamera;
 import de.gurkenlabs.litiengine.input.IMouse;
 import de.gurkenlabs.litiengine.input.Input;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 
 /**
@@ -26,13 +25,13 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
 
     private Point2D camPos;
     private Point2D oldPos;
-    private Camera cam;
+    private ICamera cam;
     private boolean dragging;
 
-    public MouseDraggedListener(Camera cam) {
+    public MouseDraggedListener() {
         super();
         oldPos = Input.mouse().getLocation();
-        this.cam = cam;
+        this.cam = Game.world().camera();
         camPos = new Point2D.Double(0, 0);
         dragging = false;
 

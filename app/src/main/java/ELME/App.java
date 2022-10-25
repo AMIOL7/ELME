@@ -38,8 +38,8 @@ public class App {
         Game.world().setCamera(cam);
         System.out.println("Camera printout: "+cam.getZoom());
         
-        Input.mouse().onDragged(new MouseDraggedListener(cam));
-        Input.mouse().onWheelMoved(new CustomWheelListener(cam));
+        Input.mouse().onDragged(new MouseDraggedListener());
+        Input.mouse().onWheelMoved(new CustomWheelListener());
         Game.start();
         
         System.out.println("Camera printout: "+cam.getZoom());
