@@ -26,10 +26,10 @@ public abstract class Node {
     }
 
     /**
-     * Constructs a built-in Node with specific number of Inputs and OutPuts
+     * Constructs a built-in Node with specific number of Inputs and Outputs
      *
      * @param tag
-     * @param numberofInputs
+     * @param numberOfInputs
      * @param numberOfOutputs
      */
     public Node(String tag, int numberOfInputs, int numberOfOutputs) {

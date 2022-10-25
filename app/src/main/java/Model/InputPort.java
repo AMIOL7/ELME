@@ -30,9 +30,9 @@ public class InputPort extends Port {
 
     /**
      * In case there is a valid value available returns it, otherwise returns
-     * null.
+     * empty {@link Optional Optional}.
      *
-     * @return Boolean value associated with port
+     * @return Optional Boolean value associated with port
      */
     @Override
     public Optional<Boolean> getValue() {
