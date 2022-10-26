@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Optional;
+
 /**
  * Represents the abstract concept of a port
  *
@@ -21,9 +23,9 @@ public abstract class Port {
     /**
      * Returns value associated with port
      *
-     * @return Boolean value associated with port
+     * @return Optional Boolean value associated with port
      */
-    public abstract Boolean getValue();
+    public abstract Optional<Boolean> getValue();
 
     public String getTag() {
         return tag;

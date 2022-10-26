@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.Optional;
+
 /**
  * A kind of {@link Model.Port Port} which is used as outputs for
  * {@link Model.Node Nodes}. This kind of port can be connected to many other
@@ -13,7 +15,7 @@ package Model;
  */
 public class OutputPort extends Port {
 
-    private Boolean value;
+    private Optional<Boolean> value;
 
     /**
      * Construct an OutputPort with a tag
@@ -25,12 +27,12 @@ public class OutputPort extends Port {
     }
 
     @Override
-    public Boolean getValue() {
+    public Optional<Boolean> getValue() {
         return value;
     }
-    
-    public void setValue(boolean value) {
-    	this.value=value;
+
+    public void setValue(Optional<Boolean> value) {
+        this.value = value;
     }
-    
+
 }
