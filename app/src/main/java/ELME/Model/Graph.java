@@ -1,10 +1,10 @@
-package Model;
+package ELME.Model;
 
 import java.util.ArrayList;
 
 /**
- * Represents a composition of {@link Model.Node Nodes}. Notice that Graph
- * itself inherits from {@link Model.Node Node}, therefore subgraphs (nested
+ * Represents a composition of {@link ELME.Model.Node Nodes}. Notice that Graph
+ * itself inherits from {@link ELME.Model.Node Node}, therefore subgraphs (nested
  * graphs) are permitted.
  *
  * @author Máté Visnyár
