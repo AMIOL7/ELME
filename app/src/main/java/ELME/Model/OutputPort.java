@@ -1,11 +1,11 @@
-package Model;
+package ELME.Model;
 
 import java.util.Optional;
 
 /**
- * A kind of {@link Model.Port Port} which is used as outputs for
- * {@link Model.Node Nodes}. This kind of port can be connected to many other
- * ports ({@link Model.InputPort InputPort})
+ * A kind of {@link ELME.Model.Port Port} which is used as outputs for
+ * {@link ELME.Model.Node Nodes}. This kind of port can be connected to many other
+ * ports ({@link ELME.Model.InputPort InputPort})
  *
  * Notice that OutputPorts are not able to initiate a connection nor store which
  * other ports they are connected to. Therefore they act passive in most

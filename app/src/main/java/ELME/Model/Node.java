@@ -1,4 +1,4 @@
-package Model;
+package ELME.Model;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -58,7 +58,7 @@ public abstract class Node {
     /**
      *
      * Evaluates the node and updates the value of
-     * {@link Model.OutputPort OutputPorts}.
+     * {@link ELME.Model.OutputPort OutputPorts}.
      */
     public void evaluate() {
         if (inputs.stream().anyMatch(x -> x.getValue().isEmpty())) {
@@ -70,7 +70,7 @@ public abstract class Node {
 
     /**
      * Evaluates the node and updates the value of
-     * {@link Model.OutputPort OutputPorts}.
+     * {@link ELME.Model.OutputPort OutputPorts}.
      */
     protected abstract void evaluateImpl();
 
