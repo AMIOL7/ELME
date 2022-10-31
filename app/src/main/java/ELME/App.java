@@ -3,11 +3,11 @@
  */
 package ELME;
 
-import View.*;
+import View.MainScreen;
+import View.MouseDraggedListener;
 import de.gurkenlabs.litiengine.*;
 import de.gurkenlabs.litiengine.graphics.*;
 import de.gurkenlabs.litiengine.input.Input;
-
 
 public class App {
  

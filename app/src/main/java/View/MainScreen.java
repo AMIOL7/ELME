@@ -27,14 +27,34 @@ import static java.awt.BasicStroke.*;
  */
 public class MainScreen extends GameScreen {
 
+    private SideMenu sideMenu;
+    private Toolbar toolbar;
     public MainScreen() {
         super("TEST");
     }
 
     @Override
+    protected void initializeComponents() {
+        sideMenu = new SideMenu(0, 200, 200, 200, "Sample", "Text", "Testing");
+        toolbar = new Toolbar(350, 0, 400, 40, "File", "Options", "Help");
+        getComponents().add(sideMenu);
+        getComponents().add(toolbar);
+
+    }
+    @Override
+    public void prepare() {
+        sideMenu.setEnabled(true);
+        toolbar.setHeight(1);
+        toolbar.setEnabled(true);
+        System.out.println(toolbar.getColumns());
+        System.out.println(toolbar.getRows());
+        super.prepare();
+    }
+
+    @Override
     public void render(final Graphics2D g) {
-        super.render(g);
         drawGUIElements(g);
+        super.render(g);
         //g.setColor(Color.RED);
         //Game.graphics().renderText(g, "Test text", 100, 100);
 
