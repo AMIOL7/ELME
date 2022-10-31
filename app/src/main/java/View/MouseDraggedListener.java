@@ -35,35 +35,36 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener{
     
     @Override
     public void mouseDragged(MouseEvent me) {
-        Point2D currentPos =  Input.mouse().getLocation();
-        System.out.println(prevPosition + " - " + currentPos);
-        
-        double dx=0;
-        double dy=0;
         if (Input.mouse().isRightButtonPressed()) {
-            
-            if (currentPos.getX()>prevPosition.getX()) {
-                dx=-1;
-            } else if (currentPos.getX()<prevPosition.getX()){
-                dx=1;
-            } else {
-                dx=0;
-            }
-            if (currentPos.getY()>prevPosition.getY()) {
-                dy=-1;
-            } else if (currentPos.getY()<prevPosition.getY()){
-                dy=1;
-            } else {
-                dy=0;
-            }
-        }
-        System.out.println(camPos);
-        camPos = new Point2D.Double(camPos.getX() + dx*speed, camPos.getY() + dy*speed);
-        System.out.println(camPos);
-        cam.pan(camPos, 1);
+            Point2D currentPos = Input.mouse().getLocation();
+            System.out.println(prevPosition + " - " + currentPos);
 
-        prevPosition = currentPos;
-        
-        
+            double dx = 0;
+            double dy = 0;
+
+
+            if (currentPos.getX() > prevPosition.getX()) {
+                dx = -1;
+            } else if (currentPos.getX() < prevPosition.getX()) {
+                dx = 1;
+            } else {
+                dx = 0;
+            }
+            if (currentPos.getY() > prevPosition.getY()) {
+                dy = -1;
+            } else if (currentPos.getY() < prevPosition.getY()) {
+                dy = 1;
+            } else {
+                dy = 0;
+            }
+
+            System.out.println(camPos);
+            camPos = new Point2D.Double(camPos.getX() + dx * speed, camPos.getY() + dy * speed);
+            System.out.println(camPos);
+            cam.pan(camPos, 1);
+
+            prevPosition = currentPos;
+        }
+
     }
 }

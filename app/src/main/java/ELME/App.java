@@ -36,7 +36,6 @@ public class App {
         cam.setClampToMap(true);
         Game.world().setCamera(cam);
         System.out.println("Camera printout: "+cam.getZoom());
-        
         Input.mouse().onDragged(new MouseDraggedListener(cam));
         
         Game.start();

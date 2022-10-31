@@ -44,10 +44,7 @@ public class MainScreen extends GameScreen {
     @Override
     public void prepare() {
         sideMenu.setEnabled(true);
-        toolbar.setHeight(1);
         toolbar.setEnabled(true);
-        System.out.println(toolbar.getColumns());
-        System.out.println(toolbar.getRows());
         super.prepare();
     }
 
@@ -59,11 +56,11 @@ public class MainScreen extends GameScreen {
         //Game.graphics().renderText(g, "Test text", 100, 100);
 
         BufferedImage img = null;
-        try {
+        /*try {
             img = ImageIO.read(new File("./Resources/img.png"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
+        }*/
 
         Game.graphics().renderImage(g, img, 0, 0);
     }
