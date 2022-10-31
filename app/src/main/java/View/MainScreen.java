@@ -35,8 +35,8 @@ public class MainScreen extends GameScreen {
 
     @Override
     protected void initializeComponents() {
-        sideMenu = new SideMenu(0, 200, 200, 200, "Sample", "Text", "Testing");
-        toolbar = new Toolbar(350, 0, 400, 40, "File", "Options", "Help");
+        sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "Sample", "Text", "Testing", "1", "2", "3");
+        toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
         getComponents().add(sideMenu);
         getComponents().add(toolbar);
 
