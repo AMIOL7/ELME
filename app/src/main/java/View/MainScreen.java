@@ -24,6 +24,7 @@ import static java.awt.BasicStroke.*;
 /**
  *
  * @author andru
+ * @author pszi
  */
 public class MainScreen extends GameScreen {
 
@@ -48,26 +49,25 @@ public class MainScreen extends GameScreen {
         super.prepare();
     }
 
+    //Not needed for the time being
+    /*
     @Override
     public void render(final Graphics2D g) {
         drawGUIElements(g);
         super.render(g);
-        //g.setColor(Color.RED);
-        //Game.graphics().renderText(g, "Test text", 100, 100);
+        g.setColor(Color.RED);
+        Game.graphics().renderText(g, "Test text", 100, 100);
 
         BufferedImage img = null;
-        /*try {
+        try {
             img = ImageIO.read(new File("./Resources/img.png"));
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }*/
+        }
 
         Game.graphics().renderImage(g, img, 0, 0);
     }
 
-    /**
-     * @author pszi
-     */
     protected void drawGUIElements(final Graphics2D g) {
         g.setColor(new Color(0x404040));
         Game.graphics().renderShape(g, new Rectangle(-400, -250, 800, 500));
@@ -86,4 +86,5 @@ public class MainScreen extends GameScreen {
         Game.graphics().renderOutline(g, new Rectangle(-250, -168, 500, 25), new BasicStroke(3, CAP_ROUND, JOIN_ROUND));
         Game.graphics().renderText(g, "Toolbar", -236, -158);
     }
+     */
 }
