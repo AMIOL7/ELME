@@ -11,35 +11,39 @@ import java.util.function.IntConsumer;
 /**
  * Unfortunately, due to LitiEngine's implementation of Menu having limited
  * customization regarding the layout of the menus, the class has to be
- * entirely re-defined in order to create a menu with a vertical layout.
+ * entirely re-defined in order to create menus with different layouts.
  * Thankfully, the default implementation is rather short, so copy-pasting
- * a few functions aren't a big issue.
+ * a few functions isn't a big issue.
  */
 
-public class VerticalMenu extends ImageComponentList {
+public class ExtraMenu extends ImageComponentList {
 
     private int currentSelection;
     private final String[] items;
 
     private final List<IntConsumer> selectionChangeConsumers;
 
-    public VerticalMenu(
+    public ExtraMenu(
             final double x,
             final double y,
             final double width,
             final double height,
+            final int rows,
+            final int columns,
             final String... items) {
-        this(x, y, width, height, null, items);
+        this(x, y, width, height, rows, columns, null, items);
     }
 
-    public VerticalMenu(
+    public ExtraMenu(
             final double x,
             final double y,
             final double width,
             final double height,
+            final int rows,
+            final int columns,
             final Spritesheet background,
             final String... items) {
-        super(x, y, width, height, 1, items.length, null, background);
+        super(x, y, width, height, rows, columns, null, background);
         this.items = items;
         this.selectionChangeConsumers = new CopyOnWriteArrayList<>();
     }
