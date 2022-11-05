@@ -1,17 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package View;
+package ELME.View;
 
-import de.gurkenlabs.litiengine.graphics.Camera;
+import de.gurkenlabs.litiengine.Game;
+import de.gurkenlabs.litiengine.graphics.ICamera;
 import de.gurkenlabs.litiengine.input.IMouse;
 import de.gurkenlabs.litiengine.input.Input;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Point2D;
 
 /**
- *This event listener listens for when the user drags the mouse of the the game 
+ * This event listener listens for when the user drags the mouse of the the game 
  * screen while holding right mouse button pressed. When such event occurs,
  * it pans the camera in the opposite direction, since the element on the screen
  * should move in the same direction as the mouse
@@ -19,52 +17,66 @@ import java.awt.geom.Point2D;
  * 
  * @author andru
  */
-public class MouseDraggedListener implements IMouse.MouseDraggedListener{
+public class MouseDraggedListener implements IMouse.MouseDraggedListener {
+
     private Point2D camPos;
-    private Point2D prevPosition;
-    private Camera cam;
-    private final double speed = 2.8;
-    
-    public MouseDraggedListener(Camera cam) {    
+    private Point2D oldPos;
+    private final ICamera cam;
+    private boolean dragging;
+
+    public MouseDraggedListener() {
         super();
-        prevPosition = Input.mouse().getLocation();
-        this.cam = cam;
+        oldPos = Input.mouse().getLocation();
+        this.cam = Game.world().camera();
         camPos = new Point2D.Double(0, 0);
+        dragging = false;
+
+        Input.mouse().addMouseListener(new MouseListener() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (Input.mouse().isRightButton(e)) {
+                    dragging = true;
+                    oldPos = Input.mouse().getLocation();
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (Input.mouse().isRightButton(e)) {
+                    dragging = false;
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
+        });
+
         
     }
-    
+
     @Override
     public void mouseDragged(MouseEvent me) {
-        if (Input.mouse().isRightButtonPressed()) {
-            Point2D currentPos = Input.mouse().getLocation();
-            System.out.println(prevPosition + " - " + currentPos);
-
-            double dx = 0;
-            double dy = 0;
-
-
-            if (currentPos.getX() > prevPosition.getX()) {
-                dx = -1;
-            } else if (currentPos.getX() < prevPosition.getX()) {
-                dx = 1;
-            } else {
-                dx = 0;
-            }
-            if (currentPos.getY() > prevPosition.getY()) {
-                dy = -1;
-            } else if (currentPos.getY() < prevPosition.getY()) {
-                dy = 1;
-            } else {
-                dy = 0;
-            }
-
-            System.out.println(camPos);
-            camPos = new Point2D.Double(camPos.getX() + dx * speed, camPos.getY() + dy * speed);
-            System.out.println(camPos);
-            cam.pan(camPos, 1);
-
-            prevPosition = currentPos;
+        if (!dragging) {
+            return;
         }
 
+        Point2D newPos = Input.mouse().getLocation();
+        Point2D deltaPos = new Point2D.Double(oldPos.getX() - newPos.getX(), oldPos.getY() - newPos.getY());
+        
+        double scale = 1.0 / cam.getRenderScale();
+        camPos = new Point2D.Double(camPos.getX() + deltaPos.getX() * scale, camPos.getY() + deltaPos.getY() * scale);
+        cam.pan(camPos, 1);
+        
+        oldPos = newPos;
     }
 }

@@ -1,26 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package ELME.View;
 
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 
-
 /**
+ * This class is responsible fo rendering the main screen of the game
  *
- * @author andru
- * @author pszi
+ * @author Shamanayev Andrey
+ * @author Pap Szabolcs István
  */
 public class MainScreen extends GameScreen {
 
     private SideMenu sideMenu;
     private Toolbar toolbar;
-    public MainScreen() {
-        super("TEST");
-    }
-
-    @Override
+    public MainScreen() {super("TEST");}
+    
     protected void initializeComponents() {
         sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "Sample", "Text", "Testing", "1", "2", "3");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
