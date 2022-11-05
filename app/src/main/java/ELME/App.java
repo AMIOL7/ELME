@@ -5,7 +5,6 @@ import de.gurkenlabs.litiengine.*;
 import de.gurkenlabs.litiengine.graphics.*;
 import de.gurkenlabs.litiengine.input.Input;
 
-
 public class App {
  
     public static void main(String[] args) {
