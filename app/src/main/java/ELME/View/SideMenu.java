@@ -1,4 +1,4 @@
-package View;
+package ELME.View;
 
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
@@ -6,9 +6,6 @@ import de.gurkenlabs.litiengine.input.Input;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Consumer;
 
 /**
  * @author pszi
@@ -17,12 +14,10 @@ public class SideMenu extends ExtraMenu {
 
     public static final Color SIDE_FOREGROUND = new Color(100,180,120, 175);
     public static final Color SIDE_BACKGROUND = new Color(100,100,120, 175);
-    //private final List<Consumer<Integer>> confirmConsumer;
     private ImageComponent currentComp;
     private boolean hasItBeenDragged;
     public SideMenu(double x, double y, double width, double height, int rows, int columns, String... items) {
         super(x, y, width, height, rows, columns, items);
-        //confirmConsumer = new CopyOnWriteArrayList<>();
 
         Input.mouse().onClicked(e -> {
             if (e.getButton() == MouseEvent.BUTTON1)
@@ -40,8 +35,6 @@ public class SideMenu extends ExtraMenu {
                         hasItBeenDragged = false;
                         System.out.println(comp.getText() + " pressed");
                     }
-                    //currentComp = new ImageComponent(e.getPoint().getX(), e.getPoint().getY(), 100, 100, "Look at this");
-                    //getCellComponents().add(currentComp);
                 }
             }
         });

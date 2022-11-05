@@ -1,4 +1,4 @@
-package View;
+package ELME.View;
 
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.input.Input;

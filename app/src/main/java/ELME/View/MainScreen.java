@@ -2,23 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package View;
+package ELME.View;
 
-import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
-import de.gurkenlabs.litiengine.*;
-import de.gurkenlabs.litiengine.graphics.*;
-import de.gurkenlabs.litiengine.gui.*;
-import de.gurkenlabs.litiengine.gui.screens.*;
-import de.gurkenlabs.litiengine.input.IMouse;
-import de.gurkenlabs.litiengine.input.Input;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-
-import static java.awt.BasicStroke.*;
 
 
 /**
