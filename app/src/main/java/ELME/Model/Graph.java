@@ -24,6 +24,7 @@ public class Graph extends Node {
     public Graph(String tag, boolean isCollapsible) {
         super(tag);
         this.isCollapsible = isCollapsible;
+        this.nodes = new ArrayList<>();
     }
 
     @Override
@@ -31,4 +32,21 @@ public class Graph extends Node {
         nodes.forEach(node -> node.evaluate());
     }
 
+    public ArrayList<Node> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+    }
+
+    public boolean isCollapsed() {
+        return isCollapsed;
+    }
+
+    public void setIsCollapsed(boolean isCollapsed) {
+        this.isCollapsed = isCollapsed;
+    }
+
+    
 }

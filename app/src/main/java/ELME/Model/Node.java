@@ -92,4 +92,22 @@ public abstract class Node {
         this.tag = tag;
     }
 
+    public ArrayList<InputPort> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(ArrayList<InputPort> inputs) {
+        this.inputs = inputs;
+    }
+
+    public ArrayList<OutputPort> getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(ArrayList<OutputPort> outputs) {
+        this.outputs = outputs;
+    }
+    
+    
+
 }
