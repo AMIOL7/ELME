@@ -1,11 +1,15 @@
 package ELME.View;
 
+import ELME.Model.Node;
+import ELME.Model.Nodes.*;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.input.Input;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author pszi
@@ -16,10 +20,13 @@ public class SideMenu extends ExtraMenu {
     public static final Color SIDE_BACKGROUND = new Color(100,100,120, 175);
     private ImageComponent currentComp;
     private boolean hasItBeenDragged;
+    private String lastClickedText = "";
+    private int currentNodeIndex;
     public SideMenu(double x, double y, double width, double height, int rows, int columns, String... items) {
         super(x, y, width, height, rows, columns, items);
 
         Input.mouse().onClicked(e -> {
+            currentNodeIndex = -1;
             if (e.getButton() == MouseEvent.BUTTON1)
                 for (ImageComponent comp : getCellComponents()) {
                     if (comp.getBoundingBox().contains(e.getPoint()))
@@ -41,21 +48,25 @@ public class SideMenu extends ExtraMenu {
 
         Input.mouse().onDragged(e -> {
             if (Input.mouse().isLeftButtonPressed() && currentComp != null) {
+                MainScreen temp = (MainScreen) Game.screens().current();
+                Node typeIndicator = null;
                 if (!hasItBeenDragged)
                 {
-                    ImageComponent newComp = new ImageComponent(currentComp.getX(), currentComp.getY(), currentComp.getWidth(), currentComp.getHeight(), currentComp.getText());
-                    newComp.getAppearance().setForeColor(new Color(255, 0, 0));
-                    newComp.getAppearance().setBackgroundColor1(new Color(100, 175, 250));
-                    newComp.getAppearance().setTransparentBackground(false);
-                    newComp.getAppearanceHovered().setTransparentBackground(false);
-                    currentComp = newComp;
-                    Game.screens().current().getComponents().add(currentComp);
-                    currentComp.setEnabled(true);
-                    currentComp.setVisible(true);
-                    System.out.println(currentComp.getText() + " dragged");
+                    switch (currentComp.getText()) {
+                        case "NOT": typeIndicator = new NOTNode(); break;
+                        case "AND": typeIndicator = new ANDNode(); break;
+                        case "OR": typeIndicator = new ORNode(); break;
+                        case "XOR": typeIndicator = new XORNode(); break;
+                        case "ODD": typeIndicator = new ODDNode(); break;
+                        default: return;
+                    }
+                    currentNodeIndex = temp.graphVisuals.graph.getNodes().size();
+                    temp.graphVisuals.InsertNode(typeIndicator,
+                            new Rectangle2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY(), 50, 50));
                     hasItBeenDragged = true;
-                }
-                currentComp.setLocation(Input.mouse().getLocation());
+                } else
+                    temp.graphVisuals.MoveNode(currentNodeIndex,
+                            new Point2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()));
             }
         });
 

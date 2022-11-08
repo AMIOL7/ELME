@@ -2,9 +2,13 @@
 package ELME.View;
 
 import ELME.Model.Graph;
+import ELME.Model.Node;
+import ELME.Model.Nodes.ANDNode;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * This class is responsible fo rendering the main screen of the game
@@ -19,11 +23,11 @@ public class MainScreen extends GameScreen {
     private Toolbar toolbar;
     public MainScreen() {
         super("TEST");
-        graphVisuals = new GraphLayoutContainer(new Graph("1", false));
+        graphVisuals = new GraphLayoutContainer(new Graph("WORKING_GRAPH", false));
     }
     
     protected void initializeComponents() {
-        sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "Sample", "Text", "Testing", "1", "2", "3");
+        sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
         getComponents().add(sideMenu);
         getComponents().add(toolbar);
@@ -40,8 +44,8 @@ public class MainScreen extends GameScreen {
     @Override
     public void render(final Graphics2D g) {
         //drawGUIElements(g);
-        super.render(g);
         graphVisuals.DrawLayout(g);
+        super.render(g);
         /*g.setColor(Color.RED);
         Game.graphics().renderText(g, "Test text", 100, 100);
 

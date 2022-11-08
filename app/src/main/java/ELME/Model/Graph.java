@@ -23,6 +23,7 @@ public class Graph extends Node {
      */
     public Graph(String tag, boolean isCollapsible) {
         super(tag);
+        nodes = new ArrayList<>(); //##//
         this.isCollapsible = isCollapsible;
     }
 
