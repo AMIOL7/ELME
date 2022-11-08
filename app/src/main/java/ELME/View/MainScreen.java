@@ -1,7 +1,10 @@
 
 package ELME.View;
 
+import ELME.Model.Graph;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
+
+import java.awt.*;
 
 /**
  * This class is responsible fo rendering the main screen of the game
@@ -11,9 +14,13 @@ import de.gurkenlabs.litiengine.gui.screens.GameScreen;
  */
 public class MainScreen extends GameScreen {
 
+    public GraphLayoutContainer graphVisuals;
     private SideMenu sideMenu;
     private Toolbar toolbar;
-    public MainScreen() {super("TEST");}
+    public MainScreen() {
+        super("TEST");
+        graphVisuals = new GraphLayoutContainer(new Graph("1", false));
+    }
     
     protected void initializeComponents() {
         sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "Sample", "Text", "Testing", "1", "2", "3");
@@ -29,13 +36,13 @@ public class MainScreen extends GameScreen {
         super.prepare();
     }
 
-    //Not needed for the time being
-    /*
+
     @Override
     public void render(final Graphics2D g) {
-        drawGUIElements(g);
+        //drawGUIElements(g);
         super.render(g);
-        g.setColor(Color.RED);
+        graphVisuals.DrawLayout(g);
+        /*g.setColor(Color.RED);
         Game.graphics().renderText(g, "Test text", 100, 100);
 
         BufferedImage img = null;
@@ -45,9 +52,9 @@ public class MainScreen extends GameScreen {
             System.out.println(e.getMessage());
         }
 
-        Game.graphics().renderImage(g, img, 0, 0);
+        Game.graphics().renderImage(g, img, 0, 0);*/
     }
-
+/*
     protected void drawGUIElements(final Graphics2D g) {
         g.setColor(new Color(0x404040));
         Game.graphics().renderShape(g, new Rectangle(-400, -250, 800, 500));
