@@ -108,4 +108,22 @@ public abstract class Node {
     	return outputs;
     }
 
+    public ArrayList<InputPort> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(ArrayList<InputPort> inputs) {
+        this.inputs = inputs;
+    }
+
+    public ArrayList<OutputPort> getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(ArrayList<OutputPort> outputs) {
+        this.outputs = outputs;
+    }
+    
+    
+
 }
