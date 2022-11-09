@@ -19,16 +19,12 @@ import java.awt.geom.Point2D;
  */
 public class MouseDraggedListener implements IMouse.MouseDraggedListener {
 
-    private Point2D camPos;
     private Point2D oldPos;
-    private final ICamera cam;
     private boolean dragging;
 
     public MouseDraggedListener() {
         super();
         oldPos = Input.mouse().getLocation();
-        this.cam = Game.world().camera();
-        camPos = new Point2D.Double(0, 0);
         dragging = false;
 
         Input.mouse().addMouseListener(new MouseListener() {
@@ -69,13 +65,16 @@ public class MouseDraggedListener implements IMouse.MouseDraggedListener {
         if (!dragging) {
             return;
         }
+        
+        ICamera camera = Game.world().camera();
 
         Point2D newPos = Input.mouse().getLocation();
         Point2D deltaPos = new Point2D.Double(oldPos.getX() - newPos.getX(), oldPos.getY() - newPos.getY());
         
-        double scale = 1.0 / cam.getRenderScale();
-        camPos = new Point2D.Double(camPos.getX() + deltaPos.getX() * scale, camPos.getY() + deltaPos.getY() * scale);
-        cam.pan(camPos, 1);
+        double scale = 1.0 / camera.getRenderScale();
+        Point2D focus = camera.getFocus();
+        
+        camera.setFocus(focus.getX() + deltaPos.getX() * scale, focus.getY() + deltaPos.getY() * scale);
         
         oldPos = newPos;
     }
