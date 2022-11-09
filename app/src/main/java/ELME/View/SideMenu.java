@@ -1,5 +1,6 @@
 package ELME.View;
 
+import ELME.Controller.LogicEntity;
 import ELME.Model.Node;
 import ELME.Model.Nodes.*;
 import de.gurkenlabs.litiengine.Game;
@@ -16,11 +17,11 @@ import java.awt.geom.Rectangle2D;
  */
 public class SideMenu extends ExtraMenu {
 
-    public static final Color SIDE_FOREGROUND = new Color(100,180,120, 175);
-    public static final Color SIDE_BACKGROUND = new Color(100,100,120, 175);
+    public static final Color SIDE_FOREGROUND = new Color(50,70,255, 225);
+    public static final Color SIDE_BACKGROUND = new Color(170,170,200, 175);
     private ImageComponent currentComp;
     private boolean hasItBeenDragged;
-    private String lastClickedText = "";
+    //private String lastClickedText = "";
     private int currentNodeIndex;
     public SideMenu(double x, double y, double width, double height, int rows, int columns, String... items) {
         super(x, y, width, height, rows, columns, items);
@@ -65,8 +66,7 @@ public class SideMenu extends ExtraMenu {
                             new Rectangle2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY(), 50, 50));
                     hasItBeenDragged = true;
                 } else
-                    temp.graphVisuals.MoveNode(currentNodeIndex,
-                            new Point2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()));
+                    temp.graphVisuals.MoveNode(currentNodeIndex, Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY());
             }
         });
 

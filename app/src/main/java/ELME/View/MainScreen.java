@@ -1,14 +1,19 @@
 
 package ELME.View;
 
+import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
-import ELME.Model.Node;
-import ELME.Model.Nodes.ANDNode;
+import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
+import de.gurkenlabs.litiengine.input.Input;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Point2D;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class is responsible fo rendering the main screen of the game
@@ -21,20 +26,65 @@ public class MainScreen extends GameScreen {
     public GraphLayoutContainer graphVisuals;
     private SideMenu sideMenu;
     private Toolbar toolbar;
+    ImageComponent background;
     public MainScreen() {
         super("TEST");
-        graphVisuals = new GraphLayoutContainer(new Graph("WORKING_GRAPH", false));
+        graphVisuals = new GraphLayoutContainer(this, new Graph("WORKING_GRAPH", false));
+
+        Input.mouse().onPressed(e -> {
+            if (e.getButton() == MouseEvent.BUTTON1)
+                for (LogicEntity ent : graphVisuals.entities) {
+                    if (ent.getMoveBoundingBox().contains(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()))
+                        graphVisuals.activeEntityMove = ent;
+                    if (ent.getResizeBoundingBox().contains(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()))
+                        graphVisuals.activeEntityResize = ent;
+                }
+        });
+
+        Input.mouse().onDragged(e -> {
+            if (Input.mouse().isLeftButtonPressed()) {
+                double x = Input.mouse().getMapLocation().getX();
+                double y = Input.mouse().getMapLocation().getY();
+                if (graphVisuals.activeEntityMove != null) {
+                    graphVisuals.activeEntityMove.setLocation(x, y);
+                    graphVisuals.activeEntityMove.KeepAttached(new Rectangle2D.Double(x, y, graphVisuals.activeEntityMove.getWidth(), graphVisuals.activeEntityMove.getHeight()));
+                }
+                if (graphVisuals.activeEntityResize != null) {
+                    graphVisuals.activeEntityResize.setWidth(x - graphVisuals.activeEntityResize.getX());
+                    graphVisuals.activeEntityResize.setHeight(y - graphVisuals.activeEntityResize.getY());
+                    double w = graphVisuals.activeEntityResize.getWidth();
+                    double h = graphVisuals.activeEntityResize.getHeight();
+                    graphVisuals.activeEntityResize.KeepAttached(new Rectangle2D.Double(x-w ,y-h , w, h));
+                }
+            }
+        });
+
+        Input.mouse().onReleased(e -> {
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                graphVisuals.activeEntityMove = null;
+                graphVisuals.activeEntityResize = null;
+            }
+        });
     }
-    
+
+    private void selectClickedComponent(MouseEvent e) {
+
+    }
+
     protected void initializeComponents() {
+        BufferedImage b = null;
+        try { b = ImageIO.read(new File("app/assets/background.png")); }
+        catch (IOException e) { throw new RuntimeException(e); }
         sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
+        background = new ImageComponent(0, 0, 1920, 1080, b);
         getComponents().add(sideMenu);
         getComponents().add(toolbar);
 
     }
     @Override
     public void prepare() {
+        background.setVisible(true);
         sideMenu.setEnabled(true);
         toolbar.setEnabled(true);
         super.prepare();
@@ -44,38 +94,10 @@ public class MainScreen extends GameScreen {
     @Override
     public void render(final Graphics2D g) {
         //drawGUIElements(g);
-        graphVisuals.DrawLayout(g);
+        background.render(g);
+        try { graphVisuals.DrawLayout(g); } catch (IOException e)
+        { throw new RuntimeException("image failed to load", e); }
         super.render(g);
-        /*g.setColor(Color.RED);
-        Game.graphics().renderText(g, "Test text", 100, 100);
-
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(new File("./Resources/img.png"));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Game.graphics().renderImage(g, img, 0, 0);*/
     }
-/*
-    protected void drawGUIElements(final Graphics2D g) {
-        g.setColor(new Color(0x404040));
-        Game.graphics().renderShape(g, new Rectangle(-400, -250, 800, 500));
-        g.setColor(new Color(0xB0B0B0));
-        Game.graphics().renderText(g, "LOGO", -305, -150);
-        Game.graphics().renderShape(g, new Rectangle(-320, -110, 60, 180));
-        g.setColor(new Color(0xF0F0F0));
-        Game.graphics().renderShape(g, new Rectangle(-160, -100, 320, 200));
-        Game.graphics().renderShape(g, new Rectangle(-250, -168, 500, 25));
-        g.setColor(new Color(0x246AFF));
-        Game.graphics().renderOutline(g, new Rectangle(-320, -110, 60, 180), new BasicStroke(3, CAP_ROUND, JOIN_ROUND));
-        Game.graphics().renderText(g, "Operations Menu", -316, -100);
-        Game.graphics().renderText(g, "(floating,", -308, -92);
-        Game.graphics().renderText(g, "translucent)", -313, -84);
-        g.setColor(new Color(0x008000));
-        Game.graphics().renderOutline(g, new Rectangle(-250, -168, 500, 25), new BasicStroke(3, CAP_ROUND, JOIN_ROUND));
-        Game.graphics().renderText(g, "Toolbar", -236, -158);
-    }
-     */
+
 }
