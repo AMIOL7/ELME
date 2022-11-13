@@ -54,6 +54,7 @@ public abstract class Node {
             outputs.add(new OutputPort(("Out" + i)));
         }
     }
+    
 
     /**
      *
@@ -90,6 +91,21 @@ public abstract class Node {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+    
+    public InputPort getInputPort(int num) {
+    	return inputs.get(num);
+    }
+    public ArrayList<InputPort> getInputs(){
+    	return inputs;
+    }
+    
+    public OutputPort getOutputPort(int num) {
+    	return outputs.get(num);
+    }
+    
+    public ArrayList<OutputPort> getOutputs(){
+    	return outputs;
     }
 
 }
