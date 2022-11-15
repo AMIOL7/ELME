@@ -24,6 +24,7 @@ public class OutputPort extends Port {
      */
     public OutputPort(String tag) {
         super(tag);
+        this.value = Optional.empty();
     }
 
     @Override

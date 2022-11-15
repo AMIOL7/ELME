@@ -14,6 +14,7 @@ public class XORNode extends ELME.Model.Node {
         super("XOR", 2, 1);
     }
 
+    @Override
     public void evaluateImpl() {
         // SAFETY: It is safe to call .get() because prior to calling this method inputs are tested.
         if (inputs.stream().filter(x -> x.getValue().get() == true).count() == 1) {

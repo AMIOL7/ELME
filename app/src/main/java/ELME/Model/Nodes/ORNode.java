@@ -14,6 +14,7 @@ public class ORNode extends ELME.Model.Node {
         super("OR", 2, 1);
     }
 
+    @Override
     public void evaluateImpl() {
         // SAFETY: It is safe to call .get() because prior to calling this method inputs are tested.
         if (inputs.stream().anyMatch(x -> x.getValue().get() == true)) {
