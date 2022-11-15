@@ -10,6 +10,7 @@ import de.gurkenlabs.litiengine.input.Input;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,10 +35,15 @@ public class MainScreen extends GameScreen {
         Input.mouse().onPressed(e -> {
             if (e.getButton() == MouseEvent.BUTTON1)
                 for (LogicEntity ent : graphVisuals.entities) {
-                    if (ent.getMoveBoundingBox().contains(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()))
-                        graphVisuals.activeEntityMove = ent;
-                    if (ent.getResizeBoundingBox().contains(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY()))
-                        graphVisuals.activeEntityResize = ent;
+                    Point2D point = Input.mouse().getMapLocation();
+                    if (ent.getBoundingBox().contains(point))
+                    {
+                        graphVisuals.moveToTop(ent);
+                        if (ent.getMoveBoundingBox().contains(point))
+                            graphVisuals.activeEntityMove = ent;
+                        if (ent.getResizeBoundingBox().contains(point))
+                            graphVisuals.activeEntityResize = ent;
+                    }
                 }
         });
 

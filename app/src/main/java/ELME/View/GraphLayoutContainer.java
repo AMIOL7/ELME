@@ -4,20 +4,17 @@ import ELME.Controller.ImageLoader;
 import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
 import ELME.Model.Node;
-import de.gurkenlabs.litiengine.Game;
-import de.gurkenlabs.litiengine.resources.Resources;
-import de.gurkenlabs.litiengine.resources.TextureAtlas;
 
-import javax.imageio.ImageIO;
+import de.gurkenlabs.litiengine.Game;
+
+import javax.security.auth.login.LoginContext;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-import static java.awt.Image.*;
+
 
 /**
  * This class is what remembers and stores graphical information about the layout
@@ -32,7 +29,7 @@ public class GraphLayoutContainer implements Serializable {
 
     MainScreen screen;
     Graph graph;
-    ArrayList<LogicEntity> entities;
+    LinkedList<LogicEntity> entities;
 
     public LogicEntity activeEntityMove, activeEntityResize;
 
@@ -44,11 +41,16 @@ public class GraphLayoutContainer implements Serializable {
     public GraphLayoutContainer(MainScreen scr, Graph graph) {
         screen=scr;
         this.graph=graph;
-        entities = new ArrayList<>();
+        entities = new LinkedList<>();
+    }
+
+    public void moveToTop(LogicEntity entity) {
+        entities.remove(entity);
+        entities.addFirst(entity);
     }
 
     public void insertNode(Node node, Rectangle2D.Double location) {
-        entities.add(new LogicEntity(node, location));
+        entities.addFirst(new LogicEntity(node, location));
         graph.getNodes().add(node);
     }
 
@@ -81,7 +83,8 @@ public class GraphLayoutContainer implements Serializable {
     }
 
     public void drawLayout(final Graphics2D g) throws IOException {
-            for (int i=0; i<graph.getNodes().size(); ++i) {
+        if (entities.size() > 0)
+            for (int i=entities.size()-1; i>=0; --i) {
                 LogicEntity temp = entities.get(i);
                 drawNode(temp, new Rectangle2D.Double(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight()), g);
                 g.setColor(Color.DARK_GRAY);
@@ -100,11 +103,11 @@ public class GraphLayoutContainer implements Serializable {
         int numberOfInputs = entity.getNode().getInputs().size();
         for (int i = 0; i < numberOfInputs; ++i)
             Game.graphics().renderImage(g, ImageLoader.getImage("input/empty", 25),
-                    pos.getMinX(), pos.getMinY() + pos.height * (i + 1) / (numberOfInputs + 2));
+                    pos.getMinX()-5, pos.getMinY() + pos.height*(i+1)/(numberOfInputs+1));
         int numberOfOutputs = entity.getNode().getOutputs().size();
         for (int i = 0; i < numberOfOutputs; ++i)
             Game.graphics().renderImage(g, ImageLoader.getImage("output/empty", 25),
-                    pos.getMaxX(), pos.getMinY() + pos.height * (i + 1) / (numberOfOutputs + 2));
+                    pos.getMaxX()-5, pos.getMinY()+pos.height*(i+1)/(numberOfOutputs+1));
     }
     
     public void drawCompactLayout() {

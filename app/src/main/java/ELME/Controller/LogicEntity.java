@@ -17,6 +17,7 @@ public class LogicEntity extends Entity {
     }
 
     public void relocate(double x, double y) {
+
         setLocation(x, y);
         keepAttached(x, y, getWidth(), getHeight());
     }

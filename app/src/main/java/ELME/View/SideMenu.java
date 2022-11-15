@@ -21,13 +21,10 @@ public class SideMenu extends ExtraMenu {
     public static final Color SIDE_BACKGROUND = new Color(170,170,200, 175);
     private ImageComponent currentComp;
     private boolean hasItBeenDragged;
-    //private String lastClickedText = "";
-    private int currentNodeIndex;
     public SideMenu(double x, double y, double width, double height, int rows, int columns, String... items) {
         super(x, y, width, height, rows, columns, items);
 
         Input.mouse().onClicked(e -> {
-            currentNodeIndex = -1;
             if (e.getButton() == MouseEvent.BUTTON1)
                 for (ImageComponent comp : getCellComponents()) {
                     if (comp.getBoundingBox().contains(e.getPoint()))
@@ -61,12 +58,11 @@ public class SideMenu extends ExtraMenu {
                         case "ODD": typeIndicator = new ODDNode(); break;
                         default: return;
                     }
-                    currentNodeIndex = temp.graphVisuals.graph.getNodes().size();
                     temp.graphVisuals.insertNode(typeIndicator,
                             new Rectangle2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY(), 50, 50));
                     hasItBeenDragged = true;
                 } else
-                    temp.graphVisuals.moveNode(currentNodeIndex, Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY());
+                    temp.graphVisuals.moveNode(0, Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY());
             }
         });
 
