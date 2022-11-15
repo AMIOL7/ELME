@@ -11,6 +11,7 @@ public class NOTNode extends ELME.Model.Node {
         super("NOT", 1, 1);
     }
 
+    @Override
     public void evaluateImpl() {
         // SAFETY: It is safe to call .get() because prior to calling this method inputs are tested.
         outputs.get(0).setValue(Optional.of(!inputs.get(0).getValue().get()));

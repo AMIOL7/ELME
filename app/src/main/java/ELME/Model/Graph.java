@@ -25,6 +25,7 @@ public class Graph extends Node {
         super(tag);
         this.isCollapsible = isCollapsible;
         this.nodes = new ArrayList<>();
+        this.isCollapsed = false;
     }
 
     @Override
