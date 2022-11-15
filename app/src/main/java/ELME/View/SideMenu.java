@@ -62,11 +62,11 @@ public class SideMenu extends ExtraMenu {
                         default: return;
                     }
                     currentNodeIndex = temp.graphVisuals.graph.getNodes().size();
-                    temp.graphVisuals.InsertNode(typeIndicator,
+                    temp.graphVisuals.insertNode(typeIndicator,
                             new Rectangle2D.Double(Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY(), 50, 50));
                     hasItBeenDragged = true;
                 } else
-                    temp.graphVisuals.MoveNode(currentNodeIndex, Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY());
+                    temp.graphVisuals.moveNode(currentNodeIndex, Input.mouse().getMapLocation().getX(), Input.mouse().getMapLocation().getY());
             }
         });
 

@@ -1,5 +1,6 @@
 package ELME.View;
 
+import ELME.Controller.ImageLoader;
 import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
 import ELME.Model.Node;
@@ -46,24 +47,21 @@ public class GraphLayoutContainer implements Serializable {
         entities = new ArrayList<>();
     }
 
-    public void InsertNode(Node node, Rectangle2D.Double location) {
+    public void insertNode(Node node, Rectangle2D.Double location) {
         entities.add(new LogicEntity(node, location));
         graph.getNodes().add(node);
     }
 
-    public void MoveNode(Node node, double x, double y) throws Exception {
+    public void moveNode(LogicEntity entity, double x, double y) throws Exception {
         int index = -1;
-        for (int i = 0; i < graph.getNodes().size(); ++i)
-            if (graph.getNodes().get(i).equals(node)) // Needs .equals() to be implemented in Node
+        for (int i = 0; i < entities.size(); ++i)
+            if (entities.get(i).equals(entity)) // Needs .equals() to be implemented in Node
                 index = i;
         if (index < 0) throw new Exception("Node not found in graph");
-        MoveNode(1, x, y);
+        moveNode(index, x, y);
     }
-    public void MoveNode(int index, double x, double y) {
-        LogicEntity ent = entities.get(index);
-        ent.setLocation(x, y);
-        ent.setMoveBoundingBox(new Rectangle2D.Double(x,y, ent.getWidth(), 8));
-        ent.setResizeBoundingBox(new Rectangle2D.Double(x+ent.getWidth()-5, y+ent.getHeight()-5, 5, 5));
+    public void moveNode(int index, double x, double y) {
+        entities.get(index).relocate(x, y);
     }
 
     public void resizeNode(int index, double x, double y) {
@@ -85,7 +83,7 @@ public class GraphLayoutContainer implements Serializable {
     public void drawLayout(final Graphics2D g) throws IOException {
             for (int i=0; i<graph.getNodes().size(); ++i) {
                 LogicEntity temp = entities.get(i);
-                drawNode(graph.getNodes().get(i), new Rectangle2D.Double(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight()), g);
+                drawNode(temp, new Rectangle2D.Double(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight()), g);
                 g.setColor(Color.DARK_GRAY);
                 Game.graphics().renderOutline(g, temp.getMoveBoundingBox(), new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
                 g.setColor(Color.LIGHT_GRAY);
@@ -93,25 +91,20 @@ public class GraphLayoutContainer implements Serializable {
             }
     }
 
-    private void drawNode(Node node, Rectangle2D.Double pos, final Graphics2D g) throws IOException {
-        //Game.graphics().renderEntity();
+    private void drawNode(LogicEntity entity, Rectangle2D.Double pos, final Graphics2D g) {
+        Game.graphics().renderEntity(g, entity);
         g.setColor(Color.WHITE);
         Game.graphics().renderShape(g, pos);
         g.setColor(Color.RED);
-        Game.graphics().renderText(g, node.getTag() + " node", pos.getMinX()+5, pos.getMinY()+5);
-        Image testImage = null;
-
-        testImage = ImageIO.read(new File("app/assets/port/Input_empty.png"))
-                .getScaledInstance((int) (25 * Game.world().camera().getZoom()), (int) (25 * Game.world().camera().getZoom()), SCALE_FAST);
-        int numberOfInputs = node.getInputs().size();
+        Game.graphics().renderText(g, entity.getNode().getTag() + " node", pos.getMinX()+5, pos.getMinY()+5);
+        int numberOfInputs = entity.getNode().getInputs().size();
         for (int i = 0; i < numberOfInputs; ++i)
-            Game.graphics().renderImage(g, testImage, pos.getMinX(), pos.getMinY() + pos.height * (i + 1) / (numberOfInputs + 2));
-
-        testImage = ImageIO.read(new File("app/assets/port/Output_empty.png"))
-                .getScaledInstance((int) (25 * Game.world().camera().getZoom()), (int) (25 * Game.world().camera().getZoom()), SCALE_FAST);
-        int numberOfOutputs = node.getOutputs().size();
+            Game.graphics().renderImage(g, ImageLoader.getImage("input/empty", 25),
+                    pos.getMinX(), pos.getMinY() + pos.height * (i + 1) / (numberOfInputs + 2));
+        int numberOfOutputs = entity.getNode().getOutputs().size();
         for (int i = 0; i < numberOfOutputs; ++i)
-            Game.graphics().renderImage(g, testImage, pos.getMaxX(), pos.getMinY() + pos.height * (i + 1) / (numberOfOutputs + 2));
+            Game.graphics().renderImage(g, ImageLoader.getImage("output/empty", 25),
+                    pos.getMaxX(), pos.getMinY() + pos.height * (i + 1) / (numberOfOutputs + 2));
     }
     
     public void drawCompactLayout() {

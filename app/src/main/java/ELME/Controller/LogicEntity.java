@@ -33,17 +33,12 @@ public class LogicEntity extends Entity {
         resizeBoundingBox = new Rectangle2D.Double(x+w-5, y+h-5, 5, 5);
     }
 
-    public Rectangle2D.Double getMoveBoundingBox() {
-        return moveBoundingBox;
-    }
+   public Node getNode() { return node; }
+    public Rectangle2D.Double getMoveBoundingBox() { return moveBoundingBox; }
 
-    public void setMoveBoundingBox(Rectangle2D.Double moveBoundingBox) {
-        this.moveBoundingBox = moveBoundingBox;
-    }
+    public void setMoveBoundingBox(Rectangle2D.Double moveBoundingBox) { this.moveBoundingBox = moveBoundingBox; }
 
-    public Rectangle2D.Double getResizeBoundingBox() {
-        return resizeBoundingBox;
-    }
+    public Rectangle2D.Double getResizeBoundingBox() { return resizeBoundingBox; }
 
     public void setResizeBoundingBox(Rectangle2D.Double resizeBoundingBox) { this.resizeBoundingBox = resizeBoundingBox; }
 }
