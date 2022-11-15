@@ -48,9 +48,7 @@ class AppTest {
     void ANDNodeConnectTest() {
         ANDNode node1 = new ANDNode();
         ANDNode node2 = new ANDNode();
-
-        assertFalse(node1.getInputPort(0).isConnected());
-        assertFalse(node1.getInputPort(1).isConnected());
+        
         assertFalse(node2.getInputPort(0).isConnected());
         assertFalse(node2.getInputPort(1).isConnected());
 
