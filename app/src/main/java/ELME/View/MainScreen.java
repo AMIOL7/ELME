@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -95,7 +94,6 @@ public class MainScreen extends GameScreen {
 
     @Override
     public void render(final Graphics2D g) {
-        //drawGUIElements(g);
         background.render(g);
         try { graphVisuals.drawLayout(g); } catch (IOException e)
         { throw new RuntimeException("image failed to load", e); }

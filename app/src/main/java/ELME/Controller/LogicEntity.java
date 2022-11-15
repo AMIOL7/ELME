@@ -48,10 +48,10 @@ public class LogicEntity extends Entity {
         resizeBoundingBox = new Rectangle2D.Double(x+w-5, y+h-5, 5, 5);
         closeBoundingBox = new Rectangle2D.Double(x+w-5, y, 5, 5);
         for (int i = 0; i < inputPortsBoundingBoxes.length; ++i) {
-            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(x-4, y+h*(i+1)/(inputPortsBoundingBoxes.length+1), 6, 6);
+            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(x-4, y+h*(i+1)/(inputPortsBoundingBoxes.length+1), 8, 8);
         }
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
-            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-4, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 6, 6);
+            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-4, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 8, 8);
         }
     }
 

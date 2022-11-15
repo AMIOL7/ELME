@@ -1,6 +1,5 @@
 package ELME.View;
 
-import ELME.Controller.LogicEntity;
 import ELME.Model.Node;
 import ELME.Model.Nodes.*;
 import de.gurkenlabs.litiengine.Game;
@@ -9,7 +8,6 @@ import de.gurkenlabs.litiengine.input.Input;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
