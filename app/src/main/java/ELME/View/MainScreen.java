@@ -45,16 +45,10 @@ public class MainScreen extends GameScreen {
             if (Input.mouse().isLeftButtonPressed()) {
                 double x = Input.mouse().getMapLocation().getX();
                 double y = Input.mouse().getMapLocation().getY();
-                if (graphVisuals.activeEntityMove != null) {
-                    graphVisuals.activeEntityMove.setLocation(x, y);
-                    graphVisuals.activeEntityMove.KeepAttached(new Rectangle2D.Double(x, y, graphVisuals.activeEntityMove.getWidth(), graphVisuals.activeEntityMove.getHeight()));
-                }
+                if (graphVisuals.activeEntityMove != null)
+                    graphVisuals.activeEntityMove.relocate(x, y);
                 if (graphVisuals.activeEntityResize != null) {
-                    graphVisuals.activeEntityResize.setWidth(x - graphVisuals.activeEntityResize.getX());
-                    graphVisuals.activeEntityResize.setHeight(y - graphVisuals.activeEntityResize.getY());
-                    double w = graphVisuals.activeEntityResize.getWidth();
-                    double h = graphVisuals.activeEntityResize.getHeight();
-                    graphVisuals.activeEntityResize.KeepAttached(new Rectangle2D.Double(x-w ,y-h , w, h));
+                    graphVisuals.activeEntityResize.resize(x, y);
                 }
             }
         });
@@ -95,7 +89,7 @@ public class MainScreen extends GameScreen {
     public void render(final Graphics2D g) {
         //drawGUIElements(g);
         background.render(g);
-        try { graphVisuals.DrawLayout(g); } catch (IOException e)
+        try { graphVisuals.drawLayout(g); } catch (IOException e)
         { throw new RuntimeException("image failed to load", e); }
         super.render(g);
     }

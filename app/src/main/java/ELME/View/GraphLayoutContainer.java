@@ -66,26 +66,26 @@ public class GraphLayoutContainer implements Serializable {
         ent.setResizeBoundingBox(new Rectangle2D.Double(x+ent.getWidth()-5, y+ent.getHeight()-5, 5, 5));
     }
 
-    public void ResizeNode(int index, double x, double y) {
+    public void resizeNode(int index, double x, double y) {
         entities.get(index).setSize(x, y);
     }
 
-    public void DeleteNode(Node node) {
+    public void deleteNode(Node node) {
         
     }
 
-    public void SaveLayout() {
+    public void saveLayout() {
         
     }
 
-    public void LoadLayout() {
+    public void loadLayout() {
         
     }
 
-    public void DrawLayout(final Graphics2D g) throws IOException {
+    public void drawLayout(final Graphics2D g) throws IOException {
             for (int i=0; i<graph.getNodes().size(); ++i) {
                 LogicEntity temp = entities.get(i);
-                DrawNode(graph.getNodes().get(i), new Rectangle2D.Double(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight()), g);
+                drawNode(graph.getNodes().get(i), new Rectangle2D.Double(temp.getX(), temp.getY(), temp.getWidth(), temp.getHeight()), g);
                 g.setColor(Color.DARK_GRAY);
                 Game.graphics().renderOutline(g, temp.getMoveBoundingBox(), new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
                 g.setColor(Color.LIGHT_GRAY);
@@ -93,7 +93,7 @@ public class GraphLayoutContainer implements Serializable {
             }
     }
 
-    private void DrawNode(Node node, Rectangle2D.Double pos, final Graphics2D g) throws IOException {
+    private void drawNode(Node node, Rectangle2D.Double pos, final Graphics2D g) throws IOException {
         //Game.graphics().renderEntity();
         g.setColor(Color.WHITE);
         Game.graphics().renderShape(g, pos);
@@ -114,7 +114,7 @@ public class GraphLayoutContainer implements Serializable {
             Game.graphics().renderImage(g, testImage, pos.getMaxX(), pos.getMinY() + pos.height * (i + 1) / (numberOfOutputs + 2));
     }
     
-    public void DrawCompactLayout() {
+    public void drawCompactLayout() {
         
     }
 }

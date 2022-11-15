@@ -16,9 +16,21 @@ public class LogicEntity extends Entity {
         resizeBoundingBox = new Rectangle2D.Double(pos.getMaxX()-5, pos.getMaxY()-5, 5, 5);
     }
 
-    public void KeepAttached(Rectangle2D.Double pos) {
-        moveBoundingBox = new Rectangle2D.Double(pos.getMinX(), pos.getMinY(), pos.getWidth(), 8);
-        resizeBoundingBox = new Rectangle2D.Double(pos.getMaxX()-5, pos.getMaxY()-5, 5, 5);
+    public void relocate(double x, double y) {
+        setLocation(x, y);
+        keepAttached(x, y, getWidth(), getHeight());
+    }
+
+    public void resize(double w, double h) {
+        double x = getX();
+        double y = getY();
+        setSize(w-x, h-y);
+        keepAttached(x, y, w-x, h-y);
+    }
+
+    private void keepAttached(double x, double y, double w, double h) {
+        moveBoundingBox = new Rectangle2D.Double(x, y, w, 8);
+        resizeBoundingBox = new Rectangle2D.Double(x+w-5, y+h-5, 5, 5);
     }
 
     public Rectangle2D.Double getMoveBoundingBox() {
@@ -33,7 +45,5 @@ public class LogicEntity extends Entity {
         return resizeBoundingBox;
     }
 
-    public void setResizeBoundingBox(Rectangle2D.Double resizeBoundingBox) {
-        this.resizeBoundingBox = resizeBoundingBox;
-    }
+    public void setResizeBoundingBox(Rectangle2D.Double resizeBoundingBox) { this.resizeBoundingBox = resizeBoundingBox; }
 }
