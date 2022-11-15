@@ -39,6 +39,8 @@ public class MainScreen extends GameScreen {
                     if (ent.getBoundingBox().contains(point))
                     {
                         graphVisuals.moveToTop(ent);
+                        if (ent.getCloseBoundingBox().contains(point))
+                            graphVisuals.deleteNode(ent);
                         if (ent.getMoveBoundingBox().contains(point))
                             graphVisuals.activeEntityMove = ent;
                         if (ent.getResizeBoundingBox().contains(point))
