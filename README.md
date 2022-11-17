@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/AMIOL7/ELME/actions/workflows/gradle.yml/badge.svg)](https://github.com/AMIOL7/ELME/actions)
+
 # ELME - Logic Circuit Simulation
 
 **ELME** is a graphical application where interconnected logical components are simulated in a node graph.
