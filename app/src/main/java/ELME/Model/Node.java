@@ -91,23 +91,29 @@ public abstract class Node {
     public void setTag(String tag) {
         this.tag = tag;
     }
+    
+    public InputPort getInputPort(int num) {
+        return inputs.get(num);
+    }
 
     public ArrayList<InputPort> getInputs() {
         return inputs;
     }
 
-    public void setInputs(ArrayList<InputPort> inputs) {
-        this.inputs = inputs;
+    public OutputPort getOutputPort(int num) {
+        return outputs.get(num);
     }
 
     public ArrayList<OutputPort> getOutputs() {
         return outputs;
     }
 
+    public void setInputs(ArrayList<InputPort> inputs) {
+        this.inputs = inputs;
+    }
+
     public void setOutputs(ArrayList<OutputPort> outputs) {
         this.outputs = outputs;
     }
-    
-    
 
 }
