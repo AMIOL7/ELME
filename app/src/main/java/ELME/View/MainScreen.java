@@ -27,16 +27,15 @@ public class MainScreen extends GameScreen {
     private SideMenu sideMenu;
     private Toolbar toolbar;
     ImageComponent background;
+
     public MainScreen() {
         super("TEST");
         graphVisuals = new GraphLayoutContainer(this, new Graph("WORKING_GRAPH", false));
-
         Input.mouse().onPressed(e -> {
-            if (e.getButton() == MouseEvent.BUTTON1)
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                Point2D point = Input.mouse().getMapLocation();
                 for (LogicEntity ent : graphVisuals.entities) {
-                    Point2D point = Input.mouse().getMapLocation();
-                    if (ent.getBoundingBox().contains(point))
-                    {
+                    if (ent.getBoundingBox().contains(point)) {
                         graphVisuals.moveToTop(ent);
                         if (ent.getCloseBoundingBox().contains(point))
                             graphVisuals.deleteNode(ent);
@@ -44,8 +43,16 @@ public class MainScreen extends GameScreen {
                             graphVisuals.activeEntityMove = ent;
                         if (ent.getResizeBoundingBox().contains(point))
                             graphVisuals.activeEntityResize = ent;
+                        for (int i = 0; i < ent.getOutputPortsBoundingBoxes().length; ++i) {
+                            if (ent.getOutputPortsBoundingBoxes()[i].contains(point)) {
+                                graphVisuals.activeEntityLink = ent;
+                                graphVisuals.linkPortIndex = i;
+                            }
+                        }
+                        return;
                     }
                 }
+            }
         });
 
         Input.mouse().onDragged(e -> {
@@ -62,18 +69,19 @@ public class MainScreen extends GameScreen {
 
         Input.mouse().onReleased(e -> {
             if (e.getButton() == MouseEvent.BUTTON1) {
-                graphVisuals.activeEntityMove = null;
-                graphVisuals.activeEntityResize = null;
+                for (LogicEntity ent : graphVisuals.entities) {
+                    Point2D point = Input.mouse().getMapLocation();
+                    for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i)
+                        if (ent.getInputPortsBoundingBoxes()[i].contains(point) && graphVisuals.activeEntityLink != null)
+                            graphVisuals.activeEntityLink.addLink(graphVisuals.linkPortIndex, ent, i);
+                }
+                graphVisuals.resetActivity();
             }
         });
     }
 
-    private void selectClickedComponent(MouseEvent e) {
-
-    }
-
     protected void initializeComponents() {
-        BufferedImage b = null;
+        BufferedImage b;
         try { b = ImageIO.read(new File("app/assets/background.png")); }
         catch (IOException e) { throw new RuntimeException(e); }
         sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");

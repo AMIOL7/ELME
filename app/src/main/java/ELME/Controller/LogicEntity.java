@@ -3,14 +3,15 @@ package ELME.Controller;
 import ELME.Model.Node;
 import de.gurkenlabs.litiengine.entities.Entity;
 
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
+import java.util.ArrayList;
 
 public class LogicEntity extends Entity {
     Node node;
     Rectangle2D.Double moveBoundingBox, resizeBoundingBox, closeBoundingBox;
     Ellipse2D.Double[] inputPortsBoundingBoxes, outputPortsBoundingBoxes;
 
+    ArrayList<LinkInfo>[] links;
     public LogicEntity(Node node, Rectangle2D.Double pos) {
         this.node = node;
         setLocation(pos.getX(), pos.getY());
@@ -20,11 +21,13 @@ public class LogicEntity extends Entity {
         closeBoundingBox = new Rectangle2D.Double(pos.getMaxX()-5, pos.getMinY(), 5, 5);
         inputPortsBoundingBoxes = new Ellipse2D.Double[node.getInputs().size()];
         for (int i = 0; i < inputPortsBoundingBoxes.length; ++i) {
-            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMinX()-4, pos.getMinY()+pos.height*(i+1)/(inputPortsBoundingBoxes.length+1), 6, 6);
+            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMinX(), pos.getMinY()+pos.height*(i+1)/(inputPortsBoundingBoxes.length+1), 6, 6);
         }
         outputPortsBoundingBoxes = new Ellipse2D.Double[node.getOutputs().size()];
+        links = new ArrayList[node.getOutputs().size()];
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
-            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMaxX()-4, pos.getMinY()+pos.height*(i+1)/(outputPortsBoundingBoxes.length+1), 6, 6);
+            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMaxX()-8, pos.getMinY()+pos.height*(i+1)/(outputPortsBoundingBoxes.length+1), 6, 6);
+            //links[i] = new ArrayList<>();
         }
     }
 
@@ -43,19 +46,36 @@ public class LogicEntity extends Entity {
             keepAttached(x, y, w_new, h_new);
     }
 
+    public void addLink(int outputNum, LogicEntity into, int inputNum) {
+        if (into == this) return;
+        if (links[outputNum] == null)
+            links[outputNum] = new ArrayList<>();
+        links[outputNum].add(new LinkInfo(into, inputNum));
+        into.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
+    }
+
+    public void removeLink(int inputNum) {
+        node.getInputs().get(inputNum).disconnect();
+    }
+
+    public void removeAllLinks() {
+
+    }
+
     private void keepAttached(double x, double y, double w, double h) {
         moveBoundingBox = new Rectangle2D.Double(x, y, w-5, 8);
         resizeBoundingBox = new Rectangle2D.Double(x+w-5, y+h-5, 5, 5);
         closeBoundingBox = new Rectangle2D.Double(x+w-5, y, 5, 5);
         for (int i = 0; i < inputPortsBoundingBoxes.length; ++i) {
-            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(x-4, y+h*(i+1)/(inputPortsBoundingBoxes.length+1), 8, 8);
+            inputPortsBoundingBoxes[i] = new Ellipse2D.Double(x, y+h*(i+1)/(inputPortsBoundingBoxes.length+1), 8, 8);
         }
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
-            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-4, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 8, 8);
+            outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-8, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 8, 8);
         }
     }
 
-   public Node getNode() { return node; }
+    public Node getNode() { return node; }
+    public ArrayList<LinkInfo>[] getLinks() { return links; }
     public Rectangle2D.Double getMoveBoundingBox() { return moveBoundingBox; }
 
     public void setMoveBoundingBox(Rectangle2D.Double moveBoundingBox) { this.moveBoundingBox = moveBoundingBox; }
