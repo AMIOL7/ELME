@@ -55,10 +55,10 @@ jobs:
     - name: Generating Javadoc
       run: ./gradlew javadoc
     - name: Archive documentation
-        uses: actions/upload-artifact@v3
-        with:
-          name: JavadocHTML
-          path: app/build/docs/javadoc
+      uses: actions/upload-artifact@v3
+      with:
+        name: JavadocHTML
+        path: app/build/docs/javadoc
 
   CodeAnalysis:
     needs: Unit-Test
@@ -75,7 +75,7 @@ jobs:
     - name: Analyzing code
       run: ./gradlew jacocoTestReport
     - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: JacocoReport
-          path: app/build/jacocoHtml
+      uses: actions/upload-artifact@v3
+      with:
+        name: JacocoReport
+        path: app/build/jacocoHtml
