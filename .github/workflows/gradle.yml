@@ -72,10 +72,12 @@ jobs:
         distribution: 'temurin'
     - name: Unit Tests
       run: ./gradlew test
-    - name: Analyzing code
+    - name: Creating report
       run: ./gradlew jacocoTestReport
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
       with:
         name: JacocoReport
         path: app/build/jacocoHtml
+    - name: Coverage Verification
+      run: ./gradlew JacocoCoverageVerification
