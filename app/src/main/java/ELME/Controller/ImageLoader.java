@@ -11,6 +11,11 @@ import java.util.HashMap;
 
 import static java.awt.Image.SCALE_FAST;
 
+/**
+ * this class does very basic image loading and provides correctly scaled instances of them
+ *
+ * @author Pap Szabolcs István
+ */
 public class ImageLoader {
 
     private static HashMap<String,BufferedImage> imgdb;

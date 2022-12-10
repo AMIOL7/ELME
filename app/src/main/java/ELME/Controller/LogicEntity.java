@@ -1,19 +1,26 @@
 package ELME.Controller;
 
 import ELME.Model.Node;
+import ELME.View.MainScreen;
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Entity;
 
 import java.awt.geom.*;
-import java.util.ArrayList;
 
+/**
+ * this class stores the information about the in-world positioning of the "node"
+ *
+ * @author Pap Szabolcs István
+ */
 public class LogicEntity extends Entity {
     Node node;
     Rectangle2D.Double moveBoundingBox, resizeBoundingBox, closeBoundingBox;
     Ellipse2D.Double[] inputPortsBoundingBoxes, outputPortsBoundingBoxes;
 
-    ArrayList<LinkInfo>[] links;
+    LinkInfo[] links;
     public LogicEntity(Node node, Rectangle2D.Double pos) {
         this.node = node;
+        links = new LinkInfo[node.getInputs().size()];
         setLocation(pos.getX(), pos.getY());
         setSize(pos.getWidth(), pos.getHeight());
         moveBoundingBox = new Rectangle2D.Double(pos.getMinX(), pos.getMinY(), pos.getWidth()-5, 8);
@@ -24,19 +31,20 @@ public class LogicEntity extends Entity {
             inputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMinX(), pos.getMinY()+pos.height*(i+1)/(inputPortsBoundingBoxes.length+1), 6, 6);
         }
         outputPortsBoundingBoxes = new Ellipse2D.Double[node.getOutputs().size()];
-        links = new ArrayList[node.getOutputs().size()];
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
             outputPortsBoundingBoxes[i] = new Ellipse2D.Double(pos.getMaxX()-8, pos.getMinY()+pos.height*(i+1)/(outputPortsBoundingBoxes.length+1), 6, 6);
-            //links[i] = new ArrayList<>();
         }
     }
 
     public void relocate(double x, double y) {
-
         setLocation(x, y);
         keepAttached(x, y, getWidth(), getHeight());
     }
 
+    /**
+     * this function, aside from the trivial action, ensures there is a minimal size
+     * for the entity
+     */
     public void resize(double w, double h) {
         double x = getX();
         double y = getY();
@@ -46,20 +54,31 @@ public class LogicEntity extends Entity {
             keepAttached(x, y, w_new, h_new);
     }
 
-    public void addLink(int outputNum, LogicEntity into, int inputNum) {
-        if (into == this) return;
-        if (links[outputNum] == null)
-            links[outputNum] = new ArrayList<>();
-        links[outputNum].add(new LinkInfo(into, inputNum));
-        into.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
+    public void addLink(int outputNum, LogicEntity in, int inputNum) {
+        //System.out.println(node.getTag() + outputNum + " connecting to " + in.node.getTag() + inputNum);
+        if (in == this) return;
+        in.links[inputNum] = new LinkInfo(this, outputNum);
+        in.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
+        //System.out.println("connected");
     }
 
     public void removeLink(int inputNum) {
         node.getInputs().get(inputNum).disconnect();
+        //System.out.println(node.getTag() + inputNum + " disconnected from " + links[inputNum].entity().node.getTag() + links[inputNum].number());
+        links[inputNum] = null;
     }
 
     public void removeAllLinks() {
-
+        for (int i = 0; i < links.length; ++i) {
+            if (links[i] != null)
+                removeLink(i);
+        }
+        MainScreen s = (MainScreen) (Game.screens().current());
+        for (LogicEntity le : s.graphVisuals.getEntities())
+            for (int i = 0; i < le.links.length; ++i)
+                if (le.links[i] != null)
+                    if (le.links[i].entity() == this)
+                        le.removeLink(i);
     }
 
     private void keepAttached(double x, double y, double w, double h) {
@@ -75,32 +94,10 @@ public class LogicEntity extends Entity {
     }
 
     public Node getNode() { return node; }
-    public ArrayList<LinkInfo>[] getLinks() { return links; }
+    public LinkInfo[] getLinks() { return links; }
     public Rectangle2D.Double getMoveBoundingBox() { return moveBoundingBox; }
-
-    public void setMoveBoundingBox(Rectangle2D.Double moveBoundingBox) { this.moveBoundingBox = moveBoundingBox; }
-
     public Rectangle2D.Double getResizeBoundingBox() { return resizeBoundingBox; }
-
-    public void setResizeBoundingBox(Rectangle2D.Double resizeBoundingBox) { this.resizeBoundingBox = resizeBoundingBox; }
-
     public Rectangle2D.Double getCloseBoundingBox() { return closeBoundingBox; }
-
-    public void setCloseBoundingBox(Rectangle2D.Double closeBoundingBox) { this.closeBoundingBox = closeBoundingBox; }
-
-    public Ellipse2D.Double[] getInputPortsBoundingBoxes() {
-        return inputPortsBoundingBoxes;
-    }
-
-    public void setInputPortsBoundingBoxes(Ellipse2D.Double[] inputPortsBoundingBoxes) {
-        this.inputPortsBoundingBoxes = inputPortsBoundingBoxes;
-    }
-
-    public Ellipse2D.Double[] getOutputPortsBoundingBoxes() {
-        return outputPortsBoundingBoxes;
-    }
-
-    public void setOutputPortsBoundingBoxes(Ellipse2D.Double[] outputPortsBoundingBoxes) {
-        this.outputPortsBoundingBoxes = outputPortsBoundingBoxes;
-    }
+    public Ellipse2D.Double[] getInputPortsBoundingBoxes() { return inputPortsBoundingBoxes; }
+    public Ellipse2D.Double[] getOutputPortsBoundingBoxes() { return outputPortsBoundingBoxes; }
 }

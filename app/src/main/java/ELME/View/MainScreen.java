@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * This class is responsible fo rendering the main screen of the game
+ * This class is responsible for rendering the main screen of the game
  *
  * @author Shamanayev Andrey
  * @author Pap Szabolcs István
@@ -26,27 +26,47 @@ public class MainScreen extends GameScreen {
     public GraphLayoutContainer graphVisuals;
     private SideMenu sideMenu;
     private Toolbar toolbar;
-    ImageComponent background;
+    private ImageComponent background;
 
+    private LogicEntity activeEntity;
+    /**
+     * functions :
+     *  1 - moving
+     *  2 - resizing
+     *  3 - linking
+     */
+    private short entityInteraction;
+    private int linkPortIndex;
+    private Point2D.Double delta;
     public MainScreen() {
         super("TEST");
         graphVisuals = new GraphLayoutContainer(this, new Graph("WORKING_GRAPH", false));
         Input.mouse().onPressed(e -> {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 Point2D point = Input.mouse().getMapLocation();
+                delta = new Point2D.Double();
                 for (LogicEntity ent : graphVisuals.entities) {
                     if (ent.getBoundingBox().contains(point)) {
                         graphVisuals.moveToTop(ent);
                         if (ent.getCloseBoundingBox().contains(point))
                             graphVisuals.deleteNode(ent);
-                        if (ent.getMoveBoundingBox().contains(point))
-                            graphVisuals.activeEntityMove = ent;
-                        if (ent.getResizeBoundingBox().contains(point))
-                            graphVisuals.activeEntityResize = ent;
+                        if (ent.getMoveBoundingBox().contains(point)) {
+                            activeEntity = ent;
+                            entityInteraction = 1;
+                            delta.x = point.getX() - ent.getLocation().getX();
+                            delta.y = point.getY() - ent.getLocation().getY();
+                        }
+                        if (ent.getResizeBoundingBox().contains(point)) {
+                            activeEntity = ent;
+                            entityInteraction = 2;
+
+                        }
                         for (int i = 0; i < ent.getOutputPortsBoundingBoxes().length; ++i) {
                             if (ent.getOutputPortsBoundingBoxes()[i].contains(point)) {
-                                graphVisuals.activeEntityLink = ent;
-                                graphVisuals.linkPortIndex = i;
+                                activeEntity = ent;
+                                linkPortIndex = i;
+                                entityInteraction = 3;
+
                             }
                         }
                         return;
@@ -59,10 +79,11 @@ public class MainScreen extends GameScreen {
             if (Input.mouse().isLeftButtonPressed()) {
                 double x = Input.mouse().getMapLocation().getX();
                 double y = Input.mouse().getMapLocation().getY();
-                if (graphVisuals.activeEntityMove != null)
-                    graphVisuals.activeEntityMove.relocate(x, y);
-                if (graphVisuals.activeEntityResize != null) {
-                    graphVisuals.activeEntityResize.resize(x, y);
+                if (activeEntity != null) {
+                    if (entityInteraction == 1 && delta != null)
+                        activeEntity.relocate(x-delta.x, y-delta.y);
+                    if (entityInteraction == 2)
+                        activeEntity.resize(x, y);
                 }
             }
         });
@@ -72,10 +93,12 @@ public class MainScreen extends GameScreen {
                 for (LogicEntity ent : graphVisuals.entities) {
                     Point2D point = Input.mouse().getMapLocation();
                     for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i)
-                        if (ent.getInputPortsBoundingBoxes()[i].contains(point) && graphVisuals.activeEntityLink != null)
-                            graphVisuals.activeEntityLink.addLink(graphVisuals.linkPortIndex, ent, i);
+                        if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3)
+                                activeEntity.addLink(linkPortIndex, ent, i);
                 }
-                graphVisuals.resetActivity();
+                delta = null;
+                activeEntity = null;
+                linkPortIndex = -1;
             }
         });
     }

@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -20,8 +19,6 @@ import java.util.LinkedList;
 /**
  * This class is what remembers and stores graphical information about the layout
  * of custom graphs, both current and saved.
- *
- * (may end up being moved to the controller)
  *
  * @author Pap Szabolcs István
  */
@@ -31,14 +28,7 @@ public class GraphLayoutContainer implements Serializable {
     MainScreen screen;
     Graph graph;
     LinkedList<LogicEntity> entities;
-    public LogicEntity activeEntityMove, activeEntityResize, activeEntityLink;
-    public int linkPortIndex;
-    private boolean displayBoundingBoxes = true;
-
-    /**
-     * IMPORTANT: Only add empty graphs, otherwise there will be no position data with which to place nodes,
-     * this won't be a problem later on, but for now please look out for that
-     */
+    boolean displayBoundingBoxes = true;
 
     public GraphLayoutContainer(MainScreen scr, Graph graph) {
         screen=scr;
@@ -56,31 +46,14 @@ public class GraphLayoutContainer implements Serializable {
         graph.getNodes().add(node);
     }
 
-    public void moveNode(LogicEntity entity, double x, double y) throws Exception {
-        int index = -1;
-        for (int i = 0; i < entities.size(); ++i)
-            if (entities.get(i).equals(entity)) // Needs .equals() to be implemented in Node
-                index = i;
-        if (index < 0) throw new Exception("Node not found in graph");
-        moveNode(index, x, y);
-    }
+    /** needed only when placing a new node, otherwise would be redundant */
     public void moveNode(int index, double x, double y) { entities.get(index).relocate(x, y); }
 
     //public void resizeNode(int index, double x, double y) { entities.get(index).setSize(x, y); }
 
     public void deleteNode(LogicEntity entity) {
-        for (int i = 0; i < entity.getNode().getInputs().size(); ++i)
-            entity.removeLink(i);
+        entity.removeAllLinks();
         entities.remove(entity);
-    }
-    /*public void linkNodes(LogicEntity from, LogicEntity into, int index) {
-        into.getNode().getInputs().get(index).connect(from.getNode().getOutputs().get(linkPortIndex));
-    }*/
-    public void resetActivity() {
-        activeEntityMove = null;
-        activeEntityResize = null;
-        activeEntityLink = null;
-        linkPortIndex = -1;
     }
 
     public void saveLayout() {
@@ -95,18 +68,11 @@ public class GraphLayoutContainer implements Serializable {
         if (entities.size() > 0) {
             g.setColor(new Color(60, 60, 60, 127));
             for (int i = entities.size() - 1; i >= 0; --i) {
-                LogicEntity le = entities.get(i);
-                if (le.getLinks() != null) {
-                    ArrayList<LinkInfo>[] li = le.getLinks();
-                    for (int j = 0; j < le.getNode().getOutputs().size(); ++j) {
-                        if (le.getLinks()[j] != null) {
-                            LinkInfo out = new LinkInfo(le, j);
-                            for (LinkInfo in : le.getLinks()[j]) {
-                                drawLink(g, out, in);
-                            }
-                        }
-                    }
-                }
+                LogicEntity entity = entities.get(i);
+                LinkInfo[] info = entity.getLinks();
+                for (int j = 0; j < info.length; ++j)
+                    if (info[j] != null)
+                        drawLink(g, info[j], entity, j);
             }
             for (int i = entities.size() - 1; i >= 0; --i) {
                 LogicEntity temp = entities.get(i);
@@ -145,12 +111,12 @@ public class GraphLayoutContainer implements Serializable {
         }
     }
 
-    private void drawLink(final Graphics2D g, LinkInfo start, LinkInfo end) {
+    private void drawLink(final Graphics2D g, LinkInfo start, LogicEntity endEntity, int endInputNumber) {
         Line2D line = new Line2D.Double(
                 start.entity().getOutputPortsBoundingBoxes()[start.number()].getCenterX(),
                 start.entity().getOutputPortsBoundingBoxes()[start.number()].getCenterY(),
-                end.entity().getInputPortsBoundingBoxes()[end.number()].getCenterX(),
-                end.entity().getInputPortsBoundingBoxes()[end.number()].getCenterY());
+                endEntity.getInputPortsBoundingBoxes()[endInputNumber].getCenterX(),
+                endEntity.getInputPortsBoundingBoxes()[endInputNumber].getCenterY());
         int numOfDots = (int) (line.getP1().distance(line.getP2()) / 5.0);
         Ellipse2D.Double dot;
         for (int i = 1; i < numOfDots; ++i) {
@@ -166,5 +132,9 @@ public class GraphLayoutContainer implements Serializable {
 
     public void toggleDisplayBoundingBoxes() {
         displayBoundingBoxes = !displayBoundingBoxes;
+    }
+
+    public LinkedList<LogicEntity> getEntities() {
+        return entities;
     }
 }
