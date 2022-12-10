@@ -48,8 +48,8 @@ public class LogicEntity extends Entity {
     public void resize(double w, double h) {
         double x = getX();
         double y = getY();
-        double w_new = w-x >= 30 ? w-x : 30;
-        double h_new = h-y >= 40 ? h-y : 40;
+        double w_new = Math.max(w-x, 30);
+        double h_new = Math.max(h-y, 40);
             setSize(w_new, h_new);
             keepAttached(x, y, w_new, h_new);
     }
@@ -60,6 +60,7 @@ public class LogicEntity extends Entity {
         in.links[inputNum] = new LinkInfo(this, outputNum);
         in.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
         //System.out.println("connected");
+
     }
 
     public void removeLink(int inputNum) {

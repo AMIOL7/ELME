@@ -94,7 +94,7 @@ public class MainScreen extends GameScreen {
                     Point2D point = Input.mouse().getMapLocation();
                     for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i)
                         if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3)
-                                activeEntity.addLink(linkPortIndex, ent, i);
+                            activeEntity.addLink(linkPortIndex, ent, i);
                 }
                 delta = null;
                 activeEntity = null;
@@ -105,7 +105,7 @@ public class MainScreen extends GameScreen {
 
     protected void initializeComponents() {
         BufferedImage b;
-        try { b = ImageIO.read(new File("app/assets/background.png")); }
+        try { b = ImageIO.read(new File("assets/background.png")); }
         catch (IOException e) { throw new RuntimeException(e); }
         sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");

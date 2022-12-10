@@ -82,16 +82,8 @@ public class GraphLayoutContainer implements Serializable {
     }
 
     private void drawNode(final Graphics2D g, LogicEntity entity, Rectangle2D.Double pos) {
-        Game.graphics().renderEntity(g, entity);
-        int numberOfInputs = entity.getNode().getInputs().size();
-        for (int i = 0; i < numberOfInputs; ++i)
-            Game.graphics().renderImage(g, ImageLoader.getImage("input/empty", 25),
-                    pos.getMinX(), pos.getMinY() + pos.height*(i+1)/(numberOfInputs+1));
-        int numberOfOutputs = entity.getNode().getOutputs().size();
-        for (int i = 0; i < numberOfOutputs; ++i)
-            Game.graphics().renderImage(g, ImageLoader.getImage("output/empty", 25),
-                    pos.getMaxX()-8, pos.getMinY()+pos.height*(i+1)/(numberOfOutputs+1));
-        if (displayBoundingBoxes) {
+        //Game.graphics().renderEntity(g, entity);
+        /*if (displayBoundingBoxes) {
             g.setColor(new Color(240, 240, 240, 100));
             Game.graphics().renderShape(g, pos);
             g.setColor(new Color(60, 60, 60, 100));
@@ -103,12 +95,33 @@ public class GraphLayoutContainer implements Serializable {
             Game.graphics().renderText(g, entity.getNode().getTag() + " node", pos.getMinX() + 5, pos.getMinY() + 5);
             g.setColor(Color.WHITE);
             Game.graphics().renderText(g, "X", pos.getMaxX() - 3, pos.getMinY() + 4);
-            g.setColor(new Color(240, 240, 0, 100));
+            g.setColor(new Color(240, 240, 0, 100));*/
+        int alpha = displayBoundingBoxes ? 225 : 60;
+        g.setColor(new Color(240, 240, 240, alpha));
+        Game.graphics().renderShape(g, pos);
+        g.setColor(new Color(60, 60, 60, alpha));
+        Game.graphics().renderOutline(g, entity.getMoveBoundingBox(), new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
+        g.setColor(new Color(140, 140, 140, alpha));
+        Game.graphics().renderShape(g, entity.getResizeBoundingBox());
+        g.setColor(new Color(240, 0, 0, alpha));
+        Game.graphics().renderShape(g, entity.getCloseBoundingBox());
+        Game.graphics().renderText(g, entity.getNode().getTag() + " node", pos.getMinX() + 5, pos.getMinY() + 5);
+        g.setColor(Color.WHITE);
+        Game.graphics().renderText(g, "X", pos.getMaxX() - 3, pos.getMinY() + 4);
+        int numberOfInputs = entity.getNode().getInputs().size();
+        for (int i = 0; i < numberOfInputs; ++i)
+            Game.graphics().renderImage(g, ImageLoader.getImage("input/empty", 25),
+                    pos.getMinX(), pos.getMinY() + pos.height*(i+1)/(numberOfInputs+1));
+        int numberOfOutputs = entity.getNode().getOutputs().size();
+        for (int i = 0; i < numberOfOutputs; ++i)
+            Game.graphics().renderImage(g, ImageLoader.getImage("output/empty", 25),
+                    pos.getMaxX()-8, pos.getMinY()+pos.height*(i+1)/(numberOfOutputs+1));
+        g.setColor(new Color(240, 240, 0, Math.max(alpha - 150, 0)));
             for (Ellipse2D circle : entity.getInputPortsBoundingBoxes())
                 Game.graphics().renderShape(g, circle);
             for (Ellipse2D circle : entity.getOutputPortsBoundingBoxes())
                 Game.graphics().renderShape(g, circle);
-        }
+        //}
     }
 
     private void drawLink(final Graphics2D g, LinkInfo start, LogicEntity endEntity, int endInputNumber) {

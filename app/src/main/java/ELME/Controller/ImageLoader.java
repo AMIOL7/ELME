@@ -23,9 +23,9 @@ public class ImageLoader {
     public static void loadResources() throws IOException {
         imgdb = new HashMap<String,BufferedImage>();
         BufferedImage temp;
-        temp = ImageIO.read(new File("app/assets/port/Input_empty.png"));
+        temp = ImageIO.read(new File("assets/port/Input_empty.png"));
         imgdb.put("input/empty", temp);
-        temp = ImageIO.read(new File("app/assets/port/Output_empty.png"));
+        temp = ImageIO.read(new File("assets/port/Output_empty.png"));
         imgdb.put("output/empty", temp);
     }
 
