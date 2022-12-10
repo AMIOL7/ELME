@@ -1,4 +1,3 @@
-
 package ELME.View;
 
 import ELME.Controller.LogicEntity;
@@ -114,6 +113,7 @@ public class MainScreen extends GameScreen {
         getComponents().add(toolbar);
 
     }
+
     @Override
     public void prepare() {
         background.setVisible(true);
@@ -122,7 +122,6 @@ public class MainScreen extends GameScreen {
         super.prepare();
     }
 
-
     @Override
     public void render(final Graphics2D g) {
         background.render(g);
@@ -130,5 +129,4 @@ public class MainScreen extends GameScreen {
         { throw new RuntimeException("image failed to load", e); }
         super.render(g);
     }
-
 }

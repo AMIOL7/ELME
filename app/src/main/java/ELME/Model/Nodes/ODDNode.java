@@ -14,9 +14,10 @@ public class ODDNode extends ELME.Model.Node {
         super("ODD", 3, 1);
     }
 
+    @Override
     public void evaluateImpl() {
         // SAFETY: It is safe to call .get() because prior to calling this method inputs are tested.
-        if (inputs.stream().filter(x -> x.getValue().get() == true).count() % 2 == 0) {
+        if (inputs.stream().filter(x -> x.getValue().get() == true).count() % 2 == 1) {
             setAllOutputs(Optional.of(true));
         } else {
             setAllOutputs(Optional.of(false));
