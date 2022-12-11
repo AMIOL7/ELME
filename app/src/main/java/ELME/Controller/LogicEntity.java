@@ -6,7 +6,6 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Entity;
 
 import java.awt.geom.*;
-import java.util.Optional;
 
 /**
  * this class stores the information about the in-world positioning of the "node"

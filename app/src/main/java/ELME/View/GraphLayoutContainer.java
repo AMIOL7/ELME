@@ -68,12 +68,20 @@ public class GraphLayoutContainer implements Serializable {
     public void drawLayout(final Graphics2D g) throws IOException {
         if (entities.size() > 0) {
             g.setColor(new Color(60, 60, 60, 127));
+            Color linkColor = null;
             for (int i = entities.size() - 1; i >= 0; --i) {
                 LogicEntity entity = entities.get(i);
                 LinkInfo[] info = entity.getLinks();
-                for (int j = 0; j < info.length; ++j)
+                for (int j = 0; j < info.length; ++j) {
+                    linkColor = switch (entity.getPortStatus(true, j)) {
+                        case DISCONNECTED -> new Color(180, 150, 0, 127);
+                        case POSITIVE -> new Color(180, 0, 0, 127);
+                        case NEGATIVE -> new Color(60, 60, 60, 127);
+                    };
+                    g.setColor(linkColor);
                     if (info[j] != null)
                         drawLink(g, info[j], entity, j);
+                }
             }
             for (int i = entities.size() - 1; i >= 0; --i) {
                 LogicEntity temp = entities.get(i);
