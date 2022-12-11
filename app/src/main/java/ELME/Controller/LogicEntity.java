@@ -6,6 +6,7 @@ import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Entity;
 
 import java.awt.geom.*;
+import java.util.Optional;
 
 /**
  * this class stores the information about the in-world positioning of the "node"
@@ -92,6 +93,21 @@ public class LogicEntity extends Entity {
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
             outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-8, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 8, 8);
         }
+    }
+
+    public ConnectionStatus getPortStatus(boolean isInput, int portNumber) {
+        if (isInput)
+            if (node.getInputs().get(portNumber).getValue().isPresent())
+                if (node.getInputs().get(portNumber).getValue().get())
+                    return ConnectionStatus.POSITIVE;
+                else return ConnectionStatus.NEGATIVE;
+            else return ConnectionStatus.DISCONNECTED;
+        else
+            if (node.getOutputs().get(portNumber).getValue().isPresent())
+                if (node.getOutputs().get(portNumber).getValue().get())
+                    return ConnectionStatus.POSITIVE;
+                else return ConnectionStatus.NEGATIVE;
+            else return ConnectionStatus.DISCONNECTED;
     }
 
     public Node getNode() { return node; }

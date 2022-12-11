@@ -27,6 +27,14 @@ public class ImageLoader {
         imgdb.put("input/empty", temp);
         temp = ImageIO.read(new File("assets/port/Output_empty.png"));
         imgdb.put("output/empty", temp);
+        temp = ImageIO.read(new File("assets/port/Input_signal.png"));
+        imgdb.put("input/positive", temp);
+        temp = ImageIO.read(new File("assets/port/Output_signal.png"));
+        imgdb.put("output/positive", temp);
+        temp = ImageIO.read(new File("assets/port/Input_no_signal.png"));
+        imgdb.put("input/negative", temp);
+        temp = ImageIO.read(new File("assets/port/Output_no_signal.png"));
+        imgdb.put("output/negative", temp);
     }
 
     public static Image getImage(String str, int px) {

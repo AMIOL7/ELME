@@ -37,6 +37,7 @@ public class MainScreen extends GameScreen {
     private short entityInteraction;
     private int linkPortIndex;
     private Point2D.Double delta;
+    private boolean showLinkDrawing = false;
     public MainScreen() {
         super("TEST");
         graphVisuals = new GraphLayoutContainer(this, new Graph("WORKING_GRAPH", false));
@@ -65,7 +66,7 @@ public class MainScreen extends GameScreen {
                                 activeEntity = ent;
                                 linkPortIndex = i;
                                 entityInteraction = 3;
-
+                                showLinkDrawing = true;
                             }
                         }
                         return;
@@ -98,6 +99,7 @@ public class MainScreen extends GameScreen {
                 delta = null;
                 activeEntity = null;
                 linkPortIndex = -1;
+                showLinkDrawing = false;
             }
         });
     }
@@ -127,6 +129,7 @@ public class MainScreen extends GameScreen {
         background.render(g);
         try { graphVisuals.drawLayout(g); } catch (IOException e)
         { throw new RuntimeException("image failed to load", e); }
+        if (showLinkDrawing) graphVisuals.drawDragLink(g, activeEntity, linkPortIndex);
         super.render(g);
     }
 }
