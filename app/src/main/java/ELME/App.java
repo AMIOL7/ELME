@@ -1,9 +1,12 @@
 package ELME;
 
+import ELME.Controller.ImageLoader;
 import ELME.View.*;
 import de.gurkenlabs.litiengine.*;
 import de.gurkenlabs.litiengine.graphics.*;
 import de.gurkenlabs.litiengine.input.Input;
+
+import java.io.IOException;
 
 public class App {
  
@@ -12,7 +15,9 @@ public class App {
         Game.addGameListener(new GameListener() {
             @Override
             public void initialized(String... args) {
-                System.out.println("Game initialized");                
+                System.out.println("Game initialized");
+                try { ImageLoader.loadResources(); }
+                catch (IOException e) { throw new RuntimeException(e); }
             }
 
             @Override

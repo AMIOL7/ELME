@@ -1,5 +1,6 @@
 package ELME.View;
 
+import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.input.Input;
 
@@ -20,8 +21,11 @@ public class Toolbar extends ExtraMenu {
         Input.mouse().onClicked(e -> {
             if (e.getButton() == MouseEvent.BUTTON1)
                 for (ImageComponent comp : getCellComponents()) {
-                    if (comp.getBoundingBox().contains(e.getPoint()))
+                    if (comp.getBoundingBox().contains(e.getPoint())) {
                         System.out.println(comp.getText() + " pressed");
+                        if (comp.getText().equals("Options"))
+                            ((MainScreen) Game.screens().current()).graphVisuals.toggleDisplayBoundingBoxes();
+                    }
                 }
         });
     }
