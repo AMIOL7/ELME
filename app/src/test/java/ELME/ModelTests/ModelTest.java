@@ -12,7 +12,7 @@ class AppTest {
     void ANDNodeConnectTest() {
         ANDNode node1 = new ANDNode();
         ANDNode node2 = new ANDNode();
-        
+
         assertFalse(node2.getInputPort(0).isConnected());
         assertFalse(node2.getInputPort(1).isConnected());
 
@@ -85,5 +85,46 @@ class AppTest {
 
         and1.getInputPort(0).connect(and2.getOutputPort(0));
         assertEquals(and1.getInputPort(0).getValue(), Optional.empty());
+    }
+
+    @Test
+    void inCycleTest() {
+        ANDNode n1 = new ANDNode();
+        ANDNode n2 = new ANDNode();
+        ANDNode n3 = new ANDNode();
+
+        // In the beginning there are no connections, so there are no cycles
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // After chaining one node after another there still should not be a cycle
+        n2.getInputPort(0).connect(n1.getOutputPort(0));
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // Chaining in the third should still not result in a cycle
+        n3.getInputPort(0).connect(n2.getOutputPort(0));
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // After connecting the third node's output to the first's input all 3 nodes should be in a (the same) cycle
+        n1.getInputPort(0).connect(n3.getOutputPort(0));
+
+        assertTrue(n1.inCycle());
+        assertTrue(n2.inCycle());
+        assertTrue(n3.inCycle());
+
+        // Undiong the previous connection shpuld return us back to a cycle-less state
+        n1.getInputPort(0).disconnect();
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
     }
 }

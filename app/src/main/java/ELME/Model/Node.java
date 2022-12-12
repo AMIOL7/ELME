@@ -1,7 +1,9 @@
 package ELME.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.Stack;
 
 /**
  * A node represents a unit of computation.
@@ -13,6 +15,7 @@ public abstract class Node {
     private String tag;
     protected ArrayList<InputPort> inputs;
     protected ArrayList<OutputPort> outputs;
+    protected HashMap<Node, Integer> dependents;
 
     /**
      * Construct a Node with a tag
@@ -23,6 +26,7 @@ public abstract class Node {
         this.tag = tag;
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
+        this.dependents = new HashMap<>();
     }
 
     /**
@@ -33,25 +37,20 @@ public abstract class Node {
      * @param numberOfOutputs
      */
     public Node(String tag, int numberOfInputs, int numberOfOutputs) {
-        this.tag = tag;
-
-        this.inputs = new ArrayList<>();
+        this(tag);
         createInputs(numberOfInputs);
-
-        this.outputs = new ArrayList<>();
         createOutputs(numberOfOutputs);
-
     }
 
     private void createInputs(int numberOfInputs) {
         for (int i = 1; i <= numberOfInputs; i++) {
-            inputs.add(new InputPort(("In" + i)));
+            inputs.add(new InputPort(("In" + i), this));
         }
     }
 
     private void createOutputs(int numberOfOutputs) {
         for (int i = 1; i <= numberOfOutputs; i++) {
-            outputs.add(new OutputPort(("Out" + i)));
+            outputs.add(new OutputPort(("Out" + i), this));
         }
     }
 
@@ -75,6 +74,56 @@ public abstract class Node {
     protected abstract void evaluateImpl();
 
     /**
+     * Adds dependent, if not already added.
+     *
+     * @param dependent dependent
+     */
+    public void addDependent(Node dependent) {
+        if (dependents.computeIfPresent(dependent, (key, val) -> val + 1) == null) {
+            dependents.put(dependent, 1);
+        }
+
+    }
+
+    /**
+     * Removes dependent if it's multiplicity is 1.
+     *
+     * @param dependent dependent
+     */
+    public void removeDependent(Node dependent) {
+        dependents.computeIfPresent(dependent, (key, val) -> val > 1 ? val - 1 : null);
+    }
+
+    /**
+     * Evaluates node and updates all dependent nodes in the same manner.
+     */
+    public void triggerDownlineUpdate() {
+        evaluate();
+        dependents.keySet().forEach((dependent) -> dependent.triggerDownlineUpdate());
+    }
+
+    /**
+     * Returns true if node is inside of a cycle
+     *
+     * @return true if node is in a cycle
+     */
+    public boolean inCycle() {
+        Stack<Node> stack = new Stack<>();
+        stack.push(this);
+
+        while (!stack.isEmpty()) {
+            for (Node dependent : stack.pop().dependents.keySet()) {
+                if (this == dependent) {
+                    return true;
+                }
+                stack.push(dependent);
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Sets the value of all the "OutputPorts" in "outputs"
      *
      * @author Viktor Bicskei
@@ -91,7 +140,7 @@ public abstract class Node {
     public void setTag(String tag) {
         this.tag = tag;
     }
-    
+
     public InputPort getInputPort(int num) {
         return inputs.get(num);
     }
