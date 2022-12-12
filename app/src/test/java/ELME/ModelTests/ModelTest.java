@@ -127,4 +127,41 @@ class AppTest {
         assertFalse(n3.inCycle());
 
     }
+    
+    @Test
+    void downlineUpdate() {
+        ANDNode and1 = new ANDNode(); // root node, just to have an output port.
+        ANDNode and2 = new ANDNode();
+        ANDNode and3 = new ANDNode();
+        ANDNode and4 = new ANDNode();
+
+        /**
+         * '-' one connection
+         * '=' two connection (two input ports)
+         * this makes: '-=' a split
+         * 
+         *                   -------= and3 -= and4
+         *                  /      /
+         * and1(always true) -= and2 
+         *                      ^
+         *                      | 
+         *           trigger update from here
+         * 
+         * Bad for a logic circuit, good for test down-line update propagation
+        **/
+        
+        and4.getInputPort(0).connect(and3.getOutputPort(0));
+        and4.getInputPort(1).connect(and3.getOutputPort(0));
+        
+        and3.getInputPort(0).connect(and1.getOutputPort(0));
+        and3.getInputPort(1).connect(and2.getOutputPort(0));
+        
+        and2.getInputPort(0).connect(and1.getOutputPort(0));
+        and2.getInputPort(1).connect(and1.getOutputPort(0));
+       
+        and1.getOutputPort(0).setValue(Optional.of(true));
+        and2.triggerDownlineUpdate();
+
+        assertTrue(and4.getOutputPort(0).getValue().get());
+    }
 }
