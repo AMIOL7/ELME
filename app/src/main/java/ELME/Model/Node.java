@@ -124,6 +124,37 @@ public abstract class Node {
     }
 
     /**
+     * Returns true if node is (either directly or transitively) depends on the
+     * result of this node
+     *
+     * @param node node
+     * @return true if node is a depends on this one
+     */
+    public boolean transitiveDependencyOf(Node node) {
+        for (Node d : dependents.keySet()) {
+            if (d == node || d.transitiveDependencyOf(node)) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether node is a direct dependent of this node.
+     *
+     * Node A is a direct dependency of Node B if and only if, at least one
+     * output port of Node A connects to at least one input port of Node B.
+     *
+     * @param node node
+     * @return true, if node is a direct dependent
+     */
+    public boolean directDependencyOf(Node node) {
+        return dependents.containsKey(node);
+    }
+
+    /**
      * Sets the value of all the "OutputPorts" in "outputs"
      *
      * @author Viktor Bicskei
