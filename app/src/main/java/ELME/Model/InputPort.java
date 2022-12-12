@@ -55,24 +55,29 @@ public class InputPort extends Port {
     }
 
     /**
-     * Connects to supplied {@link ELME.Model.OutputPort OutputPort} if not
-     * already connected.
+     * Connects to supplied {@link ELME.Model.OutputPort OutputPort}.
+     *
+     * Note that since an InputPort can only be connected to one
+     * {@link ELME.Model.OutputPort OutputPort} at a time, calling this method
+     * disconnects from the previously connected port.
      *
      * @param port {@link ELME.Model.OutputPort OutputPort} to connect to.
      */
     public void connect(OutputPort port) {
-        if (!isConnected()) {
-            this.connectedPort = port;
-            port.getOwner().addDependent(this.getOwner());
-        }
+        disconnect();
+        this.connectedPort = port;
+        port.getOwner().addDependent(this.getOwner());
+
     }
 
     /**
      * Disconnects from port
      */
     public void disconnect() {
-        connectedPort.getOwner().removeDependent(this.getOwner());
-        connectedPort = null;
+        if (isConnected()) {
+            connectedPort.getOwner().removeDependent(this.getOwner());
+            connectedPort = null;
+        }
     }
 
     public OutputPort getConnectedPort() {
