@@ -49,5 +49,38 @@ public class Graph extends Node {
         this.isCollapsed = isCollapsed;
     }
 
+    /**
+     * @return not connected InputPorts
+     */
+    public ArrayList<InputPort> getInputPorts(){
+    	ArrayList<InputPort> inputs = new ArrayList<>();
+    	for(Node ent:nodes) {
+    		for(InputPort port:ent.inputs) {
+    			if(!port.isConnected()) {
+    				inputs.add(port);
+    			}
+    		}
+    	}
+    	
+    	return inputs;
+    }
+    
+    /**
+     * @return not connected OutputPorts
+     */
+    public ArrayList<OutputPort> getOutputPorts(){
+    	ArrayList<OutputPort> outputs = new ArrayList<>();
+    	for(Node ent:nodes) {
+    		outputs.addAll(ent.outputs);
+    	}
+    	
+    	for(Node ent:nodes) {
+    		for(InputPort input:ent.inputs) {
+    			outputs.remove(input.getConnectedPort());
+    		}
+    	}
+    	
+    	return outputs;
+    }
     
 }
