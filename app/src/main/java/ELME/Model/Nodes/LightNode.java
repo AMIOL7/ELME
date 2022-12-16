@@ -2,6 +2,10 @@ package ELME.Model.Nodes;
 
 import java.util.Optional;
 
+/**
+ * A terminating node that indicates whether it's input true or false.
+ * @author Viktor Bicskei 
+ */
 public class LightNode extends ELME.Model.Node{
 	boolean active = false;
 	
@@ -24,4 +28,7 @@ public class LightNode extends ELME.Model.Node{
 		
 	}
 
+    public boolean isActive() {
+        return active;
+    }   
 }
