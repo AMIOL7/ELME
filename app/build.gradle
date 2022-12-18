@@ -30,6 +30,12 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'ELME.App'
+    executableDir = ''
+    applicationName = 'ELME'
+}
+
+applicationDistribution.from("assets") {
+    into "assets"
 }
 
 tasks.named('test') {
