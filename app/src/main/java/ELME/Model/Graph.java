@@ -1,6 +1,7 @@
 package ELME.Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Represents a composition of {@link ELME.Model.Node Nodes}. Notice that Graph
@@ -50,11 +51,45 @@ public class Graph extends Node {
     }
 
     /**
-     * @return not connected InputPorts
+     * @return not connected InputPorts in the order of increasing dependency
      */
-    public ArrayList<InputPort> getInputPorts(){
+    public ArrayList<InputPort> getFreeInputPorts(){
+    	
+    	
+    	//Creates a row, counting the dependencies of each Node individually
+    	int[] dependencyCount = new int[nodes.size()];
+    	Arrays.setAll(dependencyCount, x -> 0);
+        ArrayList<Node> sortedNodes = new ArrayList<>();
+    	int i=0;
+        for(Node node:nodes) {
+        	for(Node ent:nodes) {
+        		if(!node.equals(ent)) {
+        			if(node.transitiveDependencyOf(ent)) {
+        				dependencyCount[i]++;
+        			}
+        		}
+        	}
+        	i++;
+        }
+        
+        int max = -1;
+        
+        for(int cur:dependencyCount) {
+        	max = Math.max(max, cur);
+        }
+        
+        //Adds the nodes to a new ArrayList by increasing dependencies, thus making it sorted by the dependencies
+        for(i=0;i<=max;i++) {
+        	for(int j=0;i<nodes.size();i++) {
+        		if(dependencyCount[j]==i) {
+        			sortedNodes.add(nodes.get(j));
+        		}
+        	}
+        }
+    	
+        //Collects the not connected ports
     	ArrayList<InputPort> inputs = new ArrayList<>();
-    	for(Node ent:nodes) {
+    	for(Node ent:sortedNodes) {
     		for(InputPort port:ent.inputs) {
     			if(!port.isConnected()) {
     				inputs.add(port);
@@ -66,15 +101,50 @@ public class Graph extends Node {
     }
     
     /**
-     * @return not connected OutputPorts
+     * @return not connected OutputPorts in the order of increasing dependency
      */
-    public ArrayList<OutputPort> getOutputPorts(){
+    public ArrayList<OutputPort> getFreeOutputPorts(){
+    	
+    	//Creates a row, counting the dependencies of each Node individually
+    	int[] dependencyCount = new int[nodes.size()];
+    	Arrays.setAll(dependencyCount, x -> 0);
+        ArrayList<Node> sortedNodes = new ArrayList<>();
+    	int i=0;
+        for(Node node:nodes) {
+        	for(Node ent:nodes) {
+        		if(!node.equals(ent)) {
+        			if(node.transitiveDependencyOf(ent)) {
+        				dependencyCount[i]++;
+        			}
+        		}
+        	}
+        	i++;
+        }
+        
+        int max = -1;
+        
+        for(int cur:dependencyCount) {
+        	max = Math.max(max, cur);
+        }
+        
+        //Adds the nodes to a new ArrayList by increasing dependencies, thus making it sorted by the dependencies
+        for(i=0;i<=max;i++) {
+        	for(int j=0;i<nodes.size();i++) {
+        		if(dependencyCount[j]==i) {
+        			sortedNodes.add(nodes.get(j));
+        		}
+        	}
+        }
+    	
+    	
+    	
+    	
     	ArrayList<OutputPort> outputs = new ArrayList<>();
-    	for(Node ent:nodes) {
+    	for(Node ent:sortedNodes) {
     		outputs.addAll(ent.outputs);
     	}
     	
-    	for(Node ent:nodes) {
+    	for(Node ent:sortedNodes) {
     		for(InputPort input:ent.inputs) {
     			outputs.remove(input.getConnectedPort());
     		}
