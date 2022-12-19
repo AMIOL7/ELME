@@ -61,6 +61,11 @@ jacocoTestCoverageVerification {
             limit {
                 minimum = 0.2
             }
+            
+            
+	        excludes = [
+	         'ELME.View.*'
+	        ]
         }
 
         rule {
@@ -75,8 +80,5 @@ jacocoTestCoverageVerification {
             }
         }
         
-        excludes = [
-         'ELME.View.*'
-        ]
     }
 }
