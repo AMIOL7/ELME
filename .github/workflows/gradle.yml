@@ -82,6 +82,7 @@ jobs:
   release:
     name: "Publish new release"
     needs: Unit-Test
+    if: ${{github.event_name == 'push'}}
     runs-on: "ubuntu-latest"
 
     steps:
