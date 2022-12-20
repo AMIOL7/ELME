@@ -59,15 +59,13 @@ public class LogicEntity extends Entity {
         if (in == this) return;
         in.links[inputNum] = new LinkInfo(this, outputNum);
         in.node.getInputPort(inputNum).connect(node.getOutputPort(outputNum));
-
+        if (node.inCycle()) {
+            in.node.getInputPort(inputNum).disconnect();
+            in.links[inputNum] = null;
+        }
     }
 
-    public void toggleSwitch() {
-        System.out.println("Before toggle:" + ((ConstantNode) node).isActive());
-        ((ConstantNode) node).toggle();
-        System.out.println("After toggle:" + ((ConstantNode) node).isActive());
-
-    }
+    public void toggleSwitch() { ((ConstantNode) node).toggle(); }
 
     public void removeLink(int inputNum) {
         node.getInputPort(inputNum).disconnect();

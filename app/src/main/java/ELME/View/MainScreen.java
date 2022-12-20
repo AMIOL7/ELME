@@ -49,10 +49,11 @@ public class MainScreen extends GameScreen {
                 for (LogicEntity ent : graphVisuals.entities) {
                     if (ent.getBoundingBox().contains(point)) {
                         boolean visualAction = false;
+                        boolean logicChangeAction = false;
                         graphVisuals.moveToTop(ent);
                         if (ent.getCloseBoundingBox().contains(point)) {
                             graphVisuals.deleteNode(ent);
-                            visualAction = true;
+                            logicChangeAction = true;
                         }
                         if (ent.getMoveBoundingBox().contains(point)) {
                             activeEntity = ent;
@@ -77,7 +78,8 @@ public class MainScreen extends GameScreen {
                             }
                         }
                         if (visualAction) return;
-                        if (ent.getNode() instanceof ConstantNode) ent.toggleSwitch();
+                        if (logicChangeAction) { ent.getNode().triggerDownlineUpdate(); return; }
+                        if (ent.getNode() instanceof ConstantNode) { ent.toggleSwitch(); ent.getNode().triggerDownlineUpdate(); }
                         return;
                     }
                 }
@@ -102,8 +104,10 @@ public class MainScreen extends GameScreen {
                 for (LogicEntity ent : graphVisuals.entities) {
                     Point2D point = Input.mouse().getMapLocation();
                     for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i)
-                        if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3)
+                        if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3) {
                             activeEntity.addLink(linkPortIndex, ent, i);
+                            activeEntity.getNode().triggerDownlineUpdate();
+                        }
                 }
                 delta = null;
                 activeEntity = null;
