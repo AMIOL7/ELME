@@ -77,6 +77,12 @@ public class MainScreen extends GameScreen {
                                 visualAction = true;
                             }
                         }
+                        for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i) {
+                            if (ent.getInputPortsBoundingBoxes()[i].contains(point)) {
+                                ent.removeLink(i);
+                                logicChangeAction = true;
+                            }
+                        }
                         if (visualAction) return;
                         if (logicChangeAction) { ent.getNode().triggerDownlineUpdate(); return; }
                         if (ent.getNode() instanceof ConstantNode) { ent.toggleSwitch(); ent.getNode().triggerDownlineUpdate(); }
