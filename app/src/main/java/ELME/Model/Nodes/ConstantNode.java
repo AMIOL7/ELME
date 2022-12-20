@@ -32,4 +32,8 @@ public class ConstantNode extends Node {
     public void toggle() {
         this.active = !this.active;
     }
+    
+    public boolean isActive() {
+        return active;
+    }   
 }

@@ -63,9 +63,9 @@ public class LogicEntity extends Entity {
     }
 
     public void toggleSwitch() {
-        System.out.println(node.getOutputPort(0).getValue().get());
+        System.out.println("Before toggle:" + ((ConstantNode) node).isActive());
         ((ConstantNode) node).toggle();
-        System.out.println(node.getOutputPort(0).getValue().get());
+        System.out.println("After toggle:" + ((ConstantNode) node).isActive());
 
     }
 
