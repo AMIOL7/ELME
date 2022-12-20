@@ -30,6 +30,12 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'ELME.App'
+    executableDir = ''
+    applicationName = 'ELME'
+}
+
+applicationDistribution.from("assets") {
+    into "assets"
 }
 
 tasks.named('test') {
@@ -47,14 +53,30 @@ jacocoTestReport {
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
+    
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'ELME/View/*')
+        }))
+    }
 }
 
 jacocoTestCoverageVerification {
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: 'ELME/View/*')
+        }))
+    }
+    
     violationRules {
         rule {
             limit {
                 minimum = 0.2
             }
+            
+            
+	        excludes = [
+	        ]
         }
 
         rule {
@@ -68,5 +90,6 @@ jacocoTestCoverageVerification {
                 maximum = 0.3
             }
         }
+        
     }
 }

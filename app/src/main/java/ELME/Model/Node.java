@@ -78,10 +78,10 @@ public abstract class Node {
      * Sets the value of all the "OutputPorts" in "outputs"
      *
      * @author Viktor Bicskei
-     * @param value
+     * @param b
      */
-    public void setAllOutputs(Optional<Boolean> value) {
-        outputs.stream().forEach(x -> x.setValue(value));
+    public void setAllOutputs(Optional<Boolean> b) {
+        outputs.stream().forEach(x -> x.setValue(b));
     }
 
     public String getTag() {
