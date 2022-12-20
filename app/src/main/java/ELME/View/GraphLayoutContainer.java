@@ -1,11 +1,13 @@
 package ELME.View;
 
+import ELME.Controller.ConnectionStatus;
 import ELME.Controller.ImageLoader;
 import ELME.Controller.LinkInfo;
 import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
 import ELME.Model.Node;
 
+import ELME.Model.Nodes.*;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.input.Input;
 
@@ -106,7 +108,14 @@ public class GraphLayoutContainer implements Serializable {
             Game.graphics().renderText(g, "X", pos.getMaxX() - 3, pos.getMinY() + 4);
             g.setColor(new Color(240, 240, 0, 100));*/
         int alpha = displayBoundingBoxes ? 225 : 60;
-        g.setColor(new Color(240, 240, 240, alpha));
+        if (entity.getNode() instanceof LightNode) {
+            Color signalColor = switch (entity.getPortStatus(true, 0)) {
+                case DISCONNECTED -> new Color(180, 150, 0, 127);
+                case POSITIVE -> new Color(180, 0, 0, 127);
+                case NEGATIVE -> new Color(60, 60, 60, 127);
+            };
+            g.setColor(signalColor);
+        } else g.setColor(new Color(240, 240, 240, alpha));
         Game.graphics().renderShape(g, pos);
         g.setColor(new Color(60, 60, 60, alpha));
         Game.graphics().renderOutline(g, entity.getMoveBoundingBox(), new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));

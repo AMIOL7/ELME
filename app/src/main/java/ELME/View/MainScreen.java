@@ -2,6 +2,7 @@ package ELME.View;
 
 import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
+import ELME.Model.Nodes.ConstantNode;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 import de.gurkenlabs.litiengine.input.Input;
@@ -47,19 +48,24 @@ public class MainScreen extends GameScreen {
                 delta = new Point2D.Double();
                 for (LogicEntity ent : graphVisuals.entities) {
                     if (ent.getBoundingBox().contains(point)) {
+                        boolean visualAction = false;
                         graphVisuals.moveToTop(ent);
-                        if (ent.getCloseBoundingBox().contains(point))
+                        if (ent.getCloseBoundingBox().contains(point)) {
                             graphVisuals.deleteNode(ent);
+                            visualAction = true;
+                        }
                         if (ent.getMoveBoundingBox().contains(point)) {
                             activeEntity = ent;
                             entityInteraction = 1;
                             delta.x = point.getX() - ent.getLocation().getX();
                             delta.y = point.getY() - ent.getLocation().getY();
+                            visualAction = true;
+
                         }
                         if (ent.getResizeBoundingBox().contains(point)) {
                             activeEntity = ent;
                             entityInteraction = 2;
-
+                            visualAction = true;
                         }
                         for (int i = 0; i < ent.getOutputPortsBoundingBoxes().length; ++i) {
                             if (ent.getOutputPortsBoundingBoxes()[i].contains(point)) {
@@ -67,8 +73,11 @@ public class MainScreen extends GameScreen {
                                 linkPortIndex = i;
                                 entityInteraction = 3;
                                 showLinkDrawing = true;
+                                visualAction = true;
                             }
                         }
+                        if (visualAction) return;
+                        if (ent.getNode() instanceof ConstantNode) ent.toggleSwitch();
                         return;
                     }
                 }
@@ -108,7 +117,7 @@ public class MainScreen extends GameScreen {
         BufferedImage b;
         try { b = ImageIO.read(new File("assets/background.png")); }
         catch (IOException e) { throw new RuntimeException(e); }
-        sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");
+        sideMenu = new SideMenu(0, 200, 200, 100, 4, 2, "Constant", "Light", "NOT", "AND", "OR", "XOR", "ODD");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
         background = new ImageComponent(0, 0, 1920, 1080, b);
         getComponents().add(sideMenu);

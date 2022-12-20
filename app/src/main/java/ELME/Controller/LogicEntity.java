@@ -1,6 +1,7 @@
 package ELME.Controller;
 
 import ELME.Model.Node;
+import ELME.Model.Nodes.*;
 import ELME.View.MainScreen;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Entity;
@@ -55,17 +56,21 @@ public class LogicEntity extends Entity {
     }
 
     public void addLink(int outputNum, LogicEntity in, int inputNum) {
-        //System.out.println(node.getTag() + outputNum + " connecting to " + in.node.getTag() + inputNum);
         if (in == this) return;
         in.links[inputNum] = new LinkInfo(this, outputNum);
-        in.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
-        //System.out.println("connected");
+        in.node.getInputPort(inputNum).connect(node.getOutputPort(outputNum));
+
+    }
+
+    public void toggleSwitch() {
+        System.out.println(node.getOutputPort(0).getValue().get());
+        ((ConstantNode) node).toggle();
+        System.out.println(node.getOutputPort(0).getValue().get());
 
     }
 
     public void removeLink(int inputNum) {
-        node.getInputs().get(inputNum).disconnect();
-        //System.out.println(node.getTag() + inputNum + " disconnected from " + links[inputNum].entity().node.getTag() + links[inputNum].number());
+        node.getInputPort(inputNum).disconnect();
         links[inputNum] = null;
     }
 

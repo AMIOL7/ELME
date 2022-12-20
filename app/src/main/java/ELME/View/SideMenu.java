@@ -48,6 +48,8 @@ public class SideMenu extends ExtraMenu {
                 if (!hasItBeenDragged)
                 {
                     switch (currentComp.getText()) {
+                        case "Constant": typeIndicator = new ConstantNode(); break;
+                        case "Light": typeIndicator = new LightNode(); break;
                         case "NOT": typeIndicator = new NOTNode(); break;
                         case "AND": typeIndicator = new ANDNode(); break;
                         case "OR": typeIndicator = new ORNode(); break;
