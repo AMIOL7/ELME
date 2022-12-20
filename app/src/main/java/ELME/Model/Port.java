@@ -10,14 +10,17 @@ import java.util.Optional;
 public abstract class Port {
 
     private String tag;
+    protected Node owner;
 
     /**
-     * Construct a Port with a tag
+     * Construct a Port with a tag and owner
      *
      * @param tag Name of port
+     * @param owner Owner of port
      */
-    public Port(String tag) {
+    public Port(String tag, Node owner) {
         this.tag = tag;
+        this.owner = owner;
     }
 
     /**
@@ -33,6 +36,14 @@ public abstract class Port {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public Node getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Node owner) {
+        this.owner = owner;
     }
 
 }

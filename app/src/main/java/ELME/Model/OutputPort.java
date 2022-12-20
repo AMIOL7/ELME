@@ -18,12 +18,13 @@ public class OutputPort extends Port {
     private Optional<Boolean> value;
 
     /**
-     * Construct an OutputPort with a tag
+     * Construct an OutputPort with a tag and owner
      *
      * @param tag Name of port
+     * @param owner Owner of port
      */
-    public OutputPort(String tag) {
-        super(tag);
+    public OutputPort(String tag, Node owner) {
+        super(tag, owner);
         this.value = Optional.empty();
     }
 
