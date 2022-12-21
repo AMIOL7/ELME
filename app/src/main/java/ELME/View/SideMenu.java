@@ -36,7 +36,6 @@ public class SideMenu extends ExtraMenu {
                     if (comp.getBoundingBox().contains(e.getPoint())) {
                         currentComp = comp;
                         hasItBeenDragged = false;
-                        System.out.println(comp.getText() + " pressed");
                     }
                 }
             }
@@ -49,6 +48,8 @@ public class SideMenu extends ExtraMenu {
                 if (!hasItBeenDragged)
                 {
                     switch (currentComp.getText()) {
+                        case "Constant": typeIndicator = new ConstantNode(); break;
+                        case "Light": typeIndicator = new LightNode(); break;
                         case "NOT": typeIndicator = new NOTNode(); break;
                         case "AND": typeIndicator = new ANDNode(); break;
                         case "OR": typeIndicator = new ORNode(); break;
@@ -66,7 +67,6 @@ public class SideMenu extends ExtraMenu {
 
         Input.mouse().onReleased(e -> {
             if (e.getButton() == MouseEvent.BUTTON1 && currentComp != null) {
-                System.out.println(currentComp.getText() + " released");
                 currentComp = null;
             }
         });

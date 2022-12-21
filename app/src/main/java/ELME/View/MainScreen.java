@@ -2,6 +2,7 @@ package ELME.View;
 
 import ELME.Controller.LogicEntity;
 import ELME.Model.Graph;
+import ELME.Model.Nodes.ConstantNode;
 import de.gurkenlabs.litiengine.gui.ImageComponent;
 import de.gurkenlabs.litiengine.gui.screens.GameScreen;
 import de.gurkenlabs.litiengine.input.Input;
@@ -37,6 +38,7 @@ public class MainScreen extends GameScreen {
     private short entityInteraction;
     private int linkPortIndex;
     private Point2D.Double delta;
+    private boolean showLinkDrawing = false;
     public MainScreen() {
         super("TEST");
         graphVisuals = new GraphLayoutContainer(this, new Graph("WORKING_GRAPH", false));
@@ -46,28 +48,44 @@ public class MainScreen extends GameScreen {
                 delta = new Point2D.Double();
                 for (LogicEntity ent : graphVisuals.entities) {
                     if (ent.getBoundingBox().contains(point)) {
+                        boolean visualAction = false;
+                        boolean logicChangeAction = false;
                         graphVisuals.moveToTop(ent);
-                        if (ent.getCloseBoundingBox().contains(point))
+                        if (ent.getCloseBoundingBox().contains(point)) {
                             graphVisuals.deleteNode(ent);
+                            logicChangeAction = true;
+                        }
                         if (ent.getMoveBoundingBox().contains(point)) {
                             activeEntity = ent;
                             entityInteraction = 1;
                             delta.x = point.getX() - ent.getLocation().getX();
                             delta.y = point.getY() - ent.getLocation().getY();
+                            visualAction = true;
+
                         }
                         if (ent.getResizeBoundingBox().contains(point)) {
                             activeEntity = ent;
                             entityInteraction = 2;
-
+                            visualAction = true;
                         }
                         for (int i = 0; i < ent.getOutputPortsBoundingBoxes().length; ++i) {
                             if (ent.getOutputPortsBoundingBoxes()[i].contains(point)) {
                                 activeEntity = ent;
                                 linkPortIndex = i;
                                 entityInteraction = 3;
-
+                                showLinkDrawing = true;
+                                visualAction = true;
                             }
                         }
+                        for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i) {
+                            if (ent.getInputPortsBoundingBoxes()[i].contains(point)) {
+                                ent.removeLink(i);
+                                logicChangeAction = true;
+                            }
+                        }
+                        if (visualAction) return;
+                        if (logicChangeAction) { ent.getNode().triggerDownlineUpdate(); return; }
+                        if (ent.getNode() instanceof ConstantNode) { ent.toggleSwitch(); ent.getNode().triggerDownlineUpdate(); }
                         return;
                     }
                 }
@@ -92,12 +110,15 @@ public class MainScreen extends GameScreen {
                 for (LogicEntity ent : graphVisuals.entities) {
                     Point2D point = Input.mouse().getMapLocation();
                     for (int i = 0; i < ent.getInputPortsBoundingBoxes().length; ++i)
-                        if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3)
+                        if (activeEntity != null && ent.getInputPortsBoundingBoxes()[i].contains(point) && entityInteraction == 3) {
                             activeEntity.addLink(linkPortIndex, ent, i);
+                            activeEntity.getNode().triggerDownlineUpdate();
+                        }
                 }
                 delta = null;
                 activeEntity = null;
                 linkPortIndex = -1;
+                showLinkDrawing = false;
             }
         });
     }
@@ -106,7 +127,7 @@ public class MainScreen extends GameScreen {
         BufferedImage b;
         try { b = ImageIO.read(new File("assets/background.png")); }
         catch (IOException e) { throw new RuntimeException(e); }
-        sideMenu = new SideMenu(0, 200, 200, 100, 3, 2, "NOT", "AND", "OR", "XOR", "ODD", "more...");
+        sideMenu = new SideMenu(0, 200, 200, 100, 4, 2, "Constant", "Light", "NOT", "AND", "OR", "XOR", "ODD");
         toolbar = new Toolbar(350, 0, 400, 40,1, 3, "File", "Options", "Help");
         background = new ImageComponent(0, 0, 1920, 1080, b);
         getComponents().add(sideMenu);
@@ -127,6 +148,7 @@ public class MainScreen extends GameScreen {
         background.render(g);
         try { graphVisuals.drawLayout(g); } catch (IOException e)
         { throw new RuntimeException("image failed to load", e); }
+        if (showLinkDrawing) graphVisuals.drawDragLink(g, activeEntity, linkPortIndex);
         super.render(g);
     }
 }

@@ -12,7 +12,7 @@ class AppTest {
     void ANDNodeConnectTest() {
         ANDNode node1 = new ANDNode();
         ANDNode node2 = new ANDNode();
-        
+
         assertFalse(node2.getInputPort(0).isConnected());
         assertFalse(node2.getInputPort(1).isConnected());
 
@@ -85,5 +85,103 @@ class AppTest {
 
         and1.getInputPort(0).connect(and2.getOutputPort(0));
         assertEquals(and1.getInputPort(0).getValue(), Optional.empty());
+    }
+
+    @Test
+    void inCycleTest() {
+        ANDNode n1 = new ANDNode();
+        ANDNode n2 = new ANDNode();
+        ANDNode n3 = new ANDNode();
+
+        // In the beginning there are no connections, so there are no cycles
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // After chaining one node after another there still should not be a cycle
+        n2.getInputPort(0).connect(n1.getOutputPort(0));
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // Chaining in the third should still not result in a cycle
+        n3.getInputPort(0).connect(n2.getOutputPort(0));
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+        // After connecting the third node's output to the first's input all 3 nodes should be in a (the same) cycle
+        n1.getInputPort(0).connect(n3.getOutputPort(0));
+
+        assertTrue(n1.inCycle());
+        assertTrue(n2.inCycle());
+        assertTrue(n3.inCycle());
+
+        // Undiong the previous connection shpuld return us back to a cycle-less state
+        n1.getInputPort(0).disconnect();
+
+        assertFalse(n1.inCycle());
+        assertFalse(n2.inCycle());
+        assertFalse(n3.inCycle());
+
+    }
+
+    @Test
+    void downlineUpdate() {
+        ANDNode and1 = new ANDNode(); // root node, just to have an output port.
+        ANDNode and2 = new ANDNode();
+        ANDNode and3 = new ANDNode();
+        ANDNode and4 = new ANDNode();
+
+        /**
+         * '-' one connection '=' two connection (two input ports) this makes:
+         * '-=' a split
+         *
+         * -------= and3 -= and4 / / and1(always true) -= and2 ^ | trigger
+         * update from here
+         *
+         * Bad for a logic circuit, good for test down-line update propagation
+         *
+         */
+        and4.getInputPort(0).connect(and3.getOutputPort(0));
+        and4.getInputPort(1).connect(and3.getOutputPort(0));
+
+        and3.getInputPort(0).connect(and1.getOutputPort(0));
+        and3.getInputPort(1).connect(and2.getOutputPort(0));
+
+        and2.getInputPort(0).connect(and1.getOutputPort(0));
+        and2.getInputPort(1).connect(and1.getOutputPort(0));
+
+        and1.getOutputPort(0).setValue(Optional.of(true));
+        and2.triggerDownlineUpdate();
+
+        assertTrue(and4.getOutputPort(0).getValue().get());
+    }
+
+    @Test
+    void dependency() {
+        ANDNode not1 = new ANDNode();
+        NOTNode not2 = new NOTNode();
+        NOTNode not3 = new NOTNode();
+
+        /**
+         * not1 - not2 - not3
+         */
+        not2.getInputPort(0).connect(not1.getOutputPort(0));
+        not3.getInputPort(0).connect(not2.getOutputPort(0));
+
+        assertTrue(not1.directDependencyOf(not2));
+        assertTrue(not1.transitiveDependencyOf(not2));
+
+        assertFalse(not1.directDependencyOf(not3));
+        assertTrue(not1.transitiveDependencyOf(not3));
+
+        assertFalse(not1.directDependencyOf(not1));
+        assertFalse(not1.transitiveDependencyOf(not1));
+
+        assertFalse(not2.directDependencyOf(not1));
+        assertFalse(not2.transitiveDependencyOf(not1));
     }
 }

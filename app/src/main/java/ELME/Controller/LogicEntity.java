@@ -1,6 +1,7 @@
 package ELME.Controller;
 
 import ELME.Model.Node;
+import ELME.Model.Nodes.*;
 import ELME.View.MainScreen;
 import de.gurkenlabs.litiengine.Game;
 import de.gurkenlabs.litiengine.entities.Entity;
@@ -55,17 +56,19 @@ public class LogicEntity extends Entity {
     }
 
     public void addLink(int outputNum, LogicEntity in, int inputNum) {
-        //System.out.println(node.getTag() + outputNum + " connecting to " + in.node.getTag() + inputNum);
         if (in == this) return;
         in.links[inputNum] = new LinkInfo(this, outputNum);
-        in.node.getInputs().get(inputNum).connect(node.getOutputs().get(outputNum));
-        //System.out.println("connected");
-
+        in.node.getInputPort(inputNum).connect(node.getOutputPort(outputNum));
+        if (node.inCycle()) {
+            in.node.getInputPort(inputNum).disconnect();
+            in.links[inputNum] = null;
+        }
     }
 
+    public void toggleSwitch() { ((ConstantNode) node).toggle(); }
+
     public void removeLink(int inputNum) {
-        node.getInputs().get(inputNum).disconnect();
-        //System.out.println(node.getTag() + inputNum + " disconnected from " + links[inputNum].entity().node.getTag() + links[inputNum].number());
+        node.getInputPort(inputNum).disconnect();
         links[inputNum] = null;
     }
 
@@ -92,6 +95,21 @@ public class LogicEntity extends Entity {
         for (int i = 0; i < outputPortsBoundingBoxes.length; ++i) {
             outputPortsBoundingBoxes[i] = new Ellipse2D.Double(x+w-8, y+h*(i+1)/(outputPortsBoundingBoxes.length+1), 8, 8);
         }
+    }
+
+    public ConnectionStatus getPortStatus(boolean isInput, int portNumber) {
+        if (isInput)
+            if (node.getInputs().get(portNumber).getValue().isPresent())
+                if (node.getInputs().get(portNumber).getValue().get())
+                    return ConnectionStatus.POSITIVE;
+                else return ConnectionStatus.NEGATIVE;
+            else return ConnectionStatus.DISCONNECTED;
+        else
+            if (node.getOutputs().get(portNumber).getValue().isPresent())
+                if (node.getOutputs().get(portNumber).getValue().get())
+                    return ConnectionStatus.POSITIVE;
+                else return ConnectionStatus.NEGATIVE;
+            else return ConnectionStatus.DISCONNECTED;
     }
 
     public Node getNode() { return node; }

@@ -10,8 +10,8 @@ import java.util.Optional;
  * it is connected to.
  *
  * Usually it is the InputPort's job to initiate a connection, or to disconnect
- * itself from an other port. {@link ELME.Model.OutputPort OutputPorts} act passive
- * in this regard.
+ * itself from an other port. {@link ELME.Model.OutputPort OutputPorts} act
+ * passive in this regard.
  *
  * @author Máté Visnyár
  */
@@ -20,12 +20,13 @@ public class InputPort extends Port {
     private OutputPort connectedPort;
 
     /**
-     * Construct an InputPort with a tag
+     * Construct an InputPort with a tag and owner
      *
      * @param tag Name of port
+     * @param owner Owner of port
      */
-    public InputPort(String tag) {
-        super(tag);
+    public InputPort(String tag, Node owner) {
+        super(tag, owner);
     }
 
     /**
@@ -63,14 +64,20 @@ public class InputPort extends Port {
      * @param port {@link ELME.Model.OutputPort OutputPort} to connect to.
      */
     public void connect(OutputPort port) {
+        disconnect();
         this.connectedPort = port;
+        port.getOwner().addDependent(this.getOwner());
+
     }
 
     /**
      * Disconnects from port
      */
     public void disconnect() {
-        connectedPort = null;
+        if (isConnected()) {
+            connectedPort.getOwner().removeDependent(this.getOwner());
+            connectedPort = null;
+        }
     }
 
     public OutputPort getConnectedPort() {
