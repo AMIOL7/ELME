@@ -33,6 +33,8 @@ Double click ELME.bat file or type:
 
 into the terminal.
 
+Of course if you'd like to use an older version you can find every release on the aforementioned page.
+
 ## Building the project
 The entire project is written in **Java 17**, thus in order to build the project **JDK 17** is required.
 Furthermore the project uses the **gradle** build system so its also a prerequisite.
