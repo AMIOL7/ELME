@@ -66,7 +66,10 @@ public class InputPort extends Port {
     public void connect(OutputPort port) {
         disconnect();
         this.connectedPort = port;
-        port.getOwner().addDependent(this.getOwner());
+        Node p = null;
+        if ((p = port.getOwner()) != null) {
+            p.addDependent(this.getOwner());
+        }
 
     }
 
@@ -75,7 +78,11 @@ public class InputPort extends Port {
      */
     public void disconnect() {
         if (isConnected()) {
-            connectedPort.getOwner().removeDependent(this.getOwner());
+            Node p = null;
+            if ((p = connectedPort.getOwner()) != null) {
+                p.removeDependent(this.getOwner());
+            }
+
             connectedPort = null;
         }
     }

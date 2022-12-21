@@ -1,9 +1,13 @@
 package ELME.ModelTests;
 
+import ELME.Model.Graph;
+import ELME.Model.Node;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ELME.Model.Nodes.*;
+import ELME.Model.OutputPort;
+import java.util.ArrayList;
 import java.util.Optional;
 
 class AppTest {
@@ -135,16 +139,6 @@ class AppTest {
         ANDNode and3 = new ANDNode();
         ANDNode and4 = new ANDNode();
 
-        /**
-         * '-' one connection '=' two connection (two input ports) this makes:
-         * '-=' a split
-         *
-         * -------= and3 -= and4 / / and1(always true) -= and2 ^ | trigger
-         * update from here
-         *
-         * Bad for a logic circuit, good for test down-line update propagation
-         *
-         */
         and4.getInputPort(0).connect(and3.getOutputPort(0));
         and4.getInputPort(1).connect(and3.getOutputPort(0));
 
@@ -183,5 +177,31 @@ class AppTest {
 
         assertFalse(not2.directDependencyOf(not1));
         assertFalse(not2.transitiveDependencyOf(not1));
+    }
+
+    @Test
+    void graphEvaluation() {
+        ANDNode and = new ANDNode();
+        NOTNode not = new NOTNode();
+        OutputPort o1 = new OutputPort("a", null);
+        OutputPort o2 = new OutputPort("b", null);
+
+        o1.setValue(Optional.of(true));
+        o2.setValue(Optional.of(false));
+
+        and.getInputPort(0).connect(o1);
+        and.getInputPort(1).connect(not.getOutputPort(0));
+
+        not.getInputPort(0).connect(o2);
+
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(and);
+        nodes.add(not);
+
+        Graph g = new Graph("g", true);
+        g.setNodes(nodes);
+
+        g.evaluate();
+        assertTrue(g.getFreeOutputPorts().get(0).getValue().get());
     }
 }
