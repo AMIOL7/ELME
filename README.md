@@ -13,6 +13,26 @@ The project's goal is to deliver an easy to use application which can be used to
 - Useful built-in nodes
 - Human-readable save files
 
+## Downloading and using the software
+You can aquire a pre-built binary version of the application through our [releases page](https://github.com/AMIOL7/ELME/releases).
+Once there, look for the **latest** version marked by the green tag.
+Under assets you may choose to download the source code, this readme file, but most importantly **ELME.zip** (or ELME.tar). 
+After download unpack the archive and to run the application do the following:
+
+### Linux and mac:
+Run throuh the command line:
+```bash
+./ELME
+``` 
+
+### Windows:
+Double click ELME.bat file or type:
+```bash
+  ELME
+```
+
+into the terminal.
+
 ## Building the project
 The entire project is written in **Java 17**, thus in order to build the project **JDK 17** is required.
 Furthermore the project uses the **gradle** build system so its also a prerequisite.
@@ -24,14 +44,14 @@ The easiest (and recommended) way of building the code is to use an **IDE that s
 Once you clone the project, the main directory contains a build script which can be used to build and run the project.
 
 #### On linux and mac:
-```
+```bash
 ./gradlew tasks 	# list tasks
 ./gradlew build 	# build the project
 ./gradlew run 		# run the application
 ```
 
 #### On windows:
-```
+```bash
 gradlew tasks 		# list tasks
 gradlew build 		# build the project
 gradlew run 		# run the application
