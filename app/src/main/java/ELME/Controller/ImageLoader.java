@@ -23,17 +23,17 @@ public class ImageLoader {
     public static void loadResources() throws IOException {
         imgdb = new HashMap<String,BufferedImage>();
         BufferedImage temp;
-        temp = ImageIO.read(new File("assets/port/Input_empty.png"));
-        imgdb.put("input/empty", temp);
-        temp = ImageIO.read(new File("assets/port/Output_empty.png"));
-        imgdb.put("output/empty", temp);
-        temp = ImageIO.read(new File("assets/port/Input_signal.png"));
-        imgdb.put("input/positive", temp);
-        temp = ImageIO.read(new File("assets/port/Output_signal.png"));
-        imgdb.put("output/positive", temp);
         temp = ImageIO.read(new File("assets/port/Input_no_signal.png"));
-        imgdb.put("input/negative", temp);
+        imgdb.put("input/empty", temp);
         temp = ImageIO.read(new File("assets/port/Output_no_signal.png"));
+        imgdb.put("output/empty", temp);
+        temp = ImageIO.read(new File("assets/port/Input_positive.png"));
+        imgdb.put("input/positive", temp);
+        temp = ImageIO.read(new File("assets/port/Output_positive.png"));
+        imgdb.put("output/positive", temp);
+        temp = ImageIO.read(new File("assets/port/Input_negative.png"));
+        imgdb.put("input/negative", temp);
+        temp = ImageIO.read(new File("assets/port/Output_negative.png"));
         imgdb.put("output/negative", temp);
     }
 
