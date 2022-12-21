@@ -52,8 +52,6 @@ public class GraphLayoutContainer implements Serializable {
     /** needed only when placing a new node, otherwise would be redundant */
     public void moveNode(int index, double x, double y) { entities.get(index).relocate(x, y); }
 
-    //public void resizeNode(int index, double x, double y) { entities.get(index).setSize(x, y); }
-
     public void deleteNode(LogicEntity entity) {
         entity.removeAllLinks();
         entities.remove(entity);
@@ -76,9 +74,9 @@ public class GraphLayoutContainer implements Serializable {
                 LinkInfo[] info = entity.getLinks();
                 for (int j = 0; j < info.length; ++j) {
                     linkColor = switch (entity.getPortStatus(true, j)) {
-                        case DISCONNECTED -> new Color(180, 150, 0, 127);
-                        case POSITIVE -> new Color(180, 0, 0, 127);
-                        case NEGATIVE -> new Color(60, 60, 60, 127);
+                        case DISCONNECTED ->  new Color(85, 85, 85, 160);
+                        case POSITIVE -> new Color(100, 255, 60, 160);
+                        case NEGATIVE -> new Color(255, 60, 60, 160);
                     };
                     g.setColor(linkColor);
                     if (info[j] != null)
@@ -93,26 +91,12 @@ public class GraphLayoutContainer implements Serializable {
     }
 
     private void drawNode(final Graphics2D g, LogicEntity entity, Rectangle2D.Double pos) {
-        //Game.graphics().renderEntity(g, entity);
-        /*if (displayBoundingBoxes) {
-            g.setColor(new Color(240, 240, 240, 100));
-            Game.graphics().renderShape(g, pos);
-            g.setColor(new Color(60, 60, 60, 100));
-            Game.graphics().renderOutline(g, entity.getMoveBoundingBox(), new BasicStroke(3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-            g.setColor(new Color(140, 140, 140, 100));
-            Game.graphics().renderShape(g, entity.getResizeBoundingBox());
-            g.setColor(new Color(240, 0, 0, 100));
-            Game.graphics().renderShape(g, entity.getCloseBoundingBox());
-            Game.graphics().renderText(g, entity.getNode().getTag() + " node", pos.getMinX() + 5, pos.getMinY() + 5);
-            g.setColor(Color.WHITE);
-            Game.graphics().renderText(g, "X", pos.getMaxX() - 3, pos.getMinY() + 4);
-            g.setColor(new Color(240, 240, 0, 100));*/
         int alpha = displayBoundingBoxes ? 225 : 60;
         if (entity.getNode() instanceof LightNode) {
             Color signalColor = switch (entity.getPortStatus(true, 0)) {
-                case DISCONNECTED -> new Color(180, 150, 0, 127);
-                case POSITIVE -> new Color(180, 0, 0, 127);
-                case NEGATIVE -> new Color(60, 60, 60, 127);
+                case DISCONNECTED -> new Color(120, 120, 120, 255);
+                case POSITIVE -> new Color(100, 255, 60, 255);
+                case NEGATIVE -> new Color(255, 60, 60, 255);
             };
             g.setColor(signalColor);
         } else g.setColor(new Color(240, 240, 240, alpha));
@@ -123,6 +107,7 @@ public class GraphLayoutContainer implements Serializable {
         Game.graphics().renderShape(g, entity.getResizeBoundingBox());
         g.setColor(new Color(240, 0, 0, alpha));
         Game.graphics().renderShape(g, entity.getCloseBoundingBox());
+        g.setColor(new Color(25, 25, 255, alpha));
         Game.graphics().renderText(g, entity.getNode().getTag() + " node", pos.getMinX() + 5, pos.getMinY() + 5);
         g.setColor(Color.WHITE);
         Game.graphics().renderText(g, "X", pos.getMaxX() - 3, pos.getMinY() + 4);
@@ -147,12 +132,11 @@ public class GraphLayoutContainer implements Serializable {
             Game.graphics().renderImage(g, ImageLoader.getImage(str, 25),
                     pos.getMaxX() - 8, pos.getMinY() + pos.height * (i + 1) / (numberOfOutputs + 1));
         }
-        g.setColor(new Color(240, 240, 0, Math.max(alpha - 150, 0)));
-            for (Ellipse2D circle : entity.getInputPortsBoundingBoxes())
-                Game.graphics().renderShape(g, circle);
-            for (Ellipse2D circle : entity.getOutputPortsBoundingBoxes())
-                Game.graphics().renderShape(g, circle);
-        //}
+        g.setColor(new Color(45, 75, 225, Math.max(alpha - 150, 0)));
+        for (Ellipse2D circle : entity.getInputPortsBoundingBoxes())
+            Game.graphics().renderShape(g, circle);
+        for (Ellipse2D circle : entity.getOutputPortsBoundingBoxes())
+            Game.graphics().renderShape(g, circle);
     }
 
     private void drawLine(final Graphics2D g, Line2D line) {
