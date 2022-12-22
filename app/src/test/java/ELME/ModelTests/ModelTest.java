@@ -178,7 +178,110 @@ class AppTest {
         assertFalse(not2.directDependencyOf(not1));
         assertFalse(not2.transitiveDependencyOf(not1));
     }
+    
+    
+    @Test
+    void getFreeInputPorts() {
+    	/*
+    
+    			   and1 \_
+      		   			  \
+    	cn--and2 -- not -- odd1
+    		  	   		  _/
+    				or1	_/
+    
+    	 */
+    	ConstantNode cn = new ConstantNode();
+    	ANDNode and1 = new ANDNode();
+    	and1.setTag("AND1");
+    	and1.getInputPort(0).setTag("AND1-0");
+    	and1.getInputPort(0).setTag("AND1-1");
+        ANDNode and2 = new ANDNode();
+    	and2.setTag("AND2");
+    	and2.getInputPort(0).setTag("AND2-0");
+    	and2.getInputPort(0).setTag("AND2-1");
+        ORNode or1 = new ORNode();
+        NOTNode not = new NOTNode();
+        ODDNode odd1 = new ODDNode();
 
+        and2.getInputPort(0).connect(cn.getOutputPort(0));
+        
+        not.getInputPort(0).connect(and2.getOutputPort(0));
+        
+        odd1.getInputPort(0).connect(and1.getOutputPort(0));
+        odd1.getInputPort(1).connect(not.getOutputPort(0));
+        odd1.getInputPort(2).connect(or1.getOutputPort(0));
+
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(cn);
+        nodes.add(and1);
+        nodes.add(and2);
+        nodes.add(not);
+        nodes.add(or1);
+        nodes.add(odd1);
+
+        Graph g = new Graph("g", true);
+        g.setNodes(nodes);
+
+        assertEquals(g.getFreeInputPorts().size(),5);
+        assertEquals(g.getFreeInputPorts().get(0),and2.getInputPort(1));
+        assertEquals(g.getFreeInputPorts().get(1),and1.getInputPort(0));
+        assertEquals(g.getFreeInputPorts().get(2),and1.getInputPort(1));
+        assertEquals(g.getFreeInputPorts().get(3),or1.getInputPort(0));
+        assertEquals(g.getFreeInputPorts().get(4),or1.getInputPort(1));
+
+    }
+    
+    @Test
+    void getFreeOutputPorts() {
+    	/*
+    
+    		and1 \_
+      		   		\
+    	cn--and2 -- odd1
+    	  \	  	   _/
+    		or1	_/____not --- xor
+    
+    	 */
+    	ConstantNode cn = new ConstantNode();
+    	ANDNode and1 = new ANDNode();
+    	and1.setTag("AND1");
+        ANDNode and2 = new ANDNode();
+    	and2.setTag("AND2");
+        ORNode or1 = new ORNode();
+        ODDNode odd1 = new ODDNode();
+        NOTNode not = new NOTNode();
+        XORNode xor = new XORNode();
+
+        and2.getInputPort(0).connect(cn.getOutputPort(0));
+        or1.getInputPort(0).connect(cn.getOutputPort(0));
+        
+        odd1.getInputPort(0).connect(and1.getOutputPort(0));
+        odd1.getInputPort(1).connect(and2.getOutputPort(0));
+        odd1.getInputPort(2).connect(or1.getOutputPort(0));
+        
+        not.getInputPort(0).connect(or1.getOutputPort(0));
+        
+        xor.getInputPort(1).connect(not.getOutputPort(0));
+
+        ArrayList<Node> nodes = new ArrayList<>();
+        nodes.add(cn);
+        nodes.add(and1);
+        nodes.add(and2);
+        nodes.add(or1);
+        nodes.add(not);
+        nodes.add(xor);
+        nodes.add(odd1);
+
+        Graph g = new Graph("g", true);
+        g.setNodes(nodes);
+
+        assertEquals(g.getFreeOutputPorts().size(),2);
+        assertEquals(g.getFreeOutputPorts().get(0),xor.getOutputPort(0));
+        assertEquals(g.getFreeOutputPorts().get(1),odd1.getOutputPort(0));
+
+    }
+    
     @Test
     void graphEvaluation() {
         ANDNode and = new ANDNode();

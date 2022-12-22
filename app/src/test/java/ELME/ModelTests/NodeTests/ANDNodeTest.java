@@ -23,6 +23,7 @@ public class ANDNodeTest {
 
     @Test
     void evaluation() {
+    	//Checking for all true inputs
         ANDNode and1 = new ANDNode();
         ANDNode and2 = new ANDNode();
         ANDNode and3 = new ANDNode();
@@ -38,5 +39,12 @@ public class ANDNodeTest {
 
         assertTrue(and3.getOutputPort(0).getValue().get());
 
+      //Changing 1 true input to false.
+
+        and1.getOutputPort(0).setValue(Optional.of(false));
+        assertFalse(and3.getInputPort(0).getValue().get());
+        
+        and3.evaluate();
+        assertFalse(and3.getOutputPort(0).getValue().get());
     }
 }

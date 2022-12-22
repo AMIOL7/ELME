@@ -23,6 +23,7 @@ public class ORNodeTest {
 
     @Test
     void evaluation() {
+    	//Test for 1 true 1 false input
         ORNode or1 = new ORNode();
         ORNode or2 = new ORNode();
         ORNode or3 = new ORNode();
@@ -38,5 +39,13 @@ public class ORNodeTest {
 
         or3.evaluate();
         assertTrue(or3.getOutputPort(0).getValue().get());
+        
+        //Changing the true to false input.
+
+        or1.getOutputPort(0).setValue(Optional.of(false));
+        assertFalse(or3.getInputPort(0).getValue().get());
+        
+        or3.evaluate();
+        assertFalse(or3.getOutputPort(0).getValue().get());
     }
 }
