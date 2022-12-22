@@ -14,7 +14,7 @@ The project's goal is to deliver an easy to use application which can be used to
 - Human-readable save files
 
 ## Downloading and using the software
-You can aquire a pre-built binary version of the application through our [releases page](https://github.com/AMIOL7/ELME/releases).
+You can acquire a pre-built binary version of the application through our [releases page](https://github.com/AMIOL7/ELME/releases).
 Once there, look for the **latest** version marked by the green tag.
 Under assets you may choose to download the source code, this readme file, but most importantly **ELME.zip** (or ELME.tar). 
 After download unpack the archive and to run the application do the following:
