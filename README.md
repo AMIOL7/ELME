@@ -20,7 +20,7 @@ Under assets you may choose to download the source code, this readme file, but m
 After download unpack the archive and to run the application do the following:
 
 ### Linux and mac:
-Run throuh the command line:
+Run through the command line:
 ```bash
 ./ELME
 ``` 
