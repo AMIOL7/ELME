@@ -105,10 +105,14 @@ public class Graph extends Node {
         for (int cur : dependencyCount) {
             max = Math.max(max, cur);
         }
-
+        
+        for(i=0;i<dependencyCount.length;i++) {
+        	dependencyCount[i]=max-dependencyCount[i];
+        }
+        
         //Adds the nodes to a new ArrayList by increasing dependencies, thus making it sorted by the dependencies
         for (i = 0; i <= max; i++) {
-            for (int j = 0; i < nodes.size(); i++) {
+            for (int j = 0; j < nodes.size(); j++) {
                 if (dependencyCount[j] == i) {
                     sortedNodes.add(nodes.get(j));
                 }
@@ -117,8 +121,8 @@ public class Graph extends Node {
 
         //Collects the not connected ports
         ArrayList<InputPort> inputs = new ArrayList<>();
-        for (Node ent : sortedNodes) {
-            for (InputPort port : ent.inputs) {
+        for (Node node : sortedNodes) {
+            for (InputPort port : node.getInputs()) {
                 if (!port.isConnected()) {
                     inputs.add(port);
                 }
@@ -155,23 +159,27 @@ public class Graph extends Node {
             max = Math.max(max, cur);
         }
 
+        for(i=0;i<dependencyCount.length;i++) {
+        	dependencyCount[i]=max-dependencyCount[i];
+        }
+        
         //Adds the nodes to a new ArrayList by increasing dependencies, thus making it sorted by the dependencies
         for (i = 0; i <= max; i++) {
-            for (int j = 0; i < nodes.size(); i++) {
+            for (int j = 0; j < nodes.size(); j++) {
                 if (dependencyCount[j] == i) {
                     sortedNodes.add(nodes.get(j));
                 }
             }
         }
-
+        
         ArrayList<OutputPort> outputs = new ArrayList<>();
-        for (Node ent : sortedNodes) {
-            outputs.addAll(ent.outputs);
+        for (Node node : sortedNodes) {
+            outputs.addAll(node.outputs);
         }
 
-        for (Node ent : sortedNodes) {
-            for (InputPort input : ent.inputs) {
-                outputs.remove(input.getConnectedPort());
+        for (Node node : sortedNodes) {
+            for (InputPort port : node.inputs) {
+                outputs.remove(port.getConnectedPort());
             }
         }
 
