@@ -15,12 +15,13 @@ public class LightNode extends ELME.Model.Node{
 
 	@Override
 	public void evaluate() {
-		if(inputs.stream().anyMatch(x -> x.getValue().get() == true)) {
-			active = true;
-		}
-		else {
-			active = false;
-		}
+			if(inputs.stream().anyMatch(x -> x.getValue().equals(Optional.of(true)))) {
+				active = true;
+			}
+			else {
+				active = false;
+			}
+		
 	}
 	
 	@Override
